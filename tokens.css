@@ -1,0 +1,983 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap');
+
+/* ==========================================================================
+   flash-ui-craft: Pure CSS Design System Tokens
+   Zero external npm / Tailwind dependencies. Drop-in ready.
+   ========================================================================== */
+
+:root {
+  /* Canvas & Mesh Background */
+  --bg-canvas: #08090d;
+  --bg-mesh: radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.10) 0px, transparent 48%),
+             radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 52%),
+             radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 55%),
+             #08090d;
+
+  /* Glass Surface Hierarchy */
+  --surface-0: #08090d;
+  --surface-1: rgba(18, 21, 31, 0.72);
+  --surface-2: rgba(27, 32, 48, 0.82);
+  --surface-3: rgba(38, 45, 68, 0.90);
+  --surface-glass: rgba(18, 22, 34, 0.65);
+  --surface-glass-hover: rgba(24, 30, 46, 0.78);
+
+  /* Card Fills - opaque vertical gradients so a card reads as a solid object
+     rather than a faint tint of the page. This is the single biggest lever on
+     perceived card-ness. Never drop a card fill below 0.92 alpha. */
+  --card-fill: linear-gradient(180deg, rgba(23, 30, 46, 0.94) 0%, rgba(12, 17, 28, 0.96) 100%);
+  --card-fill-hover: linear-gradient(180deg, rgba(31, 40, 60, 0.96) 0%, rgba(16, 22, 35, 0.97) 100%);
+  --card-inset-fill: rgba(255, 255, 255, 0.045);
+  --card-inset-border: rgba(255, 255, 255, 0.07);
+  --card-corner-glow: rgba(103, 232, 249, 0.16);
+
+  /* Translucent Borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.28);
+
+  /* Accent Color Palette */
+  --cyan: #06b6d4;
+  --cyan-glow: rgba(6, 182, 212, 0.25);
+  --cyan-subtle: rgba(6, 182, 212, 0.12);
+
+  --amber: #f59e0b;
+  --amber-glow: rgba(245, 158, 11, 0.25);
+  --amber-subtle: rgba(245, 158, 11, 0.12);
+
+  --violet: #8b5cf6;
+  --violet-glow: rgba(139, 92, 246, 0.25);
+  --violet-subtle: rgba(139, 92, 246, 0.12);
+
+  --rose: #f43f5e;
+  --rose-glow: rgba(244, 63, 94, 0.25);
+  --rose-subtle: rgba(244, 63, 94, 0.12);
+
+  --emerald: #10b981;
+  --emerald-glow: rgba(16, 185, 129, 0.25);
+  --emerald-subtle: rgba(16, 185, 129, 0.12);
+
+  /* Typography Scales & Families */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
+
+  /* Typography Colors - see Contrast Floor in SKILL.md.
+     --text-body is the floor for card copy. --text-secondary is metadata ONLY
+     (timestamps, version numbers, unit labels), never primary reading content. */
+  --text-primary: #f8fafc;
+  --text-body: #e2e8f0;
+  --text-secondary: #a3b8cc;
+  --text-muted: #7f93a8;
+  --text-inverse: #090a0f;
+
+  /* Radii - larger surfaces take larger radii. A single uniform radius
+     flattens hierarchy and makes every block look like the same chip. */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-inset: 18px;
+  --radius-lg: 20px;
+  --radius-mini: 22px;
+  --radius-card: 26px;
+  --radius-hero: 30px;
+  --radius-pill: 9999px;
+
+  /* Shadows & Glows */
+  --blur-glass: blur(16px);
+  --shadow-card: 0 24px 54px -14px rgba(2, 8, 18, 0.62), 0 3px 10px -2px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border-subtle);
+  --shadow-card-hover: 0 30px 60px -12px rgba(0, 0, 0, 0.72), 0 0 32px -6px var(--card-glow, rgba(6, 182, 212, 0.25)), 0 0 0 1px var(--border-hover);
+
+  /* Layout Spacing */
+  --space-unit: 8px;
+  --space-card: 28px;
+  --gap-grid: 24px;
+  --container-max: 1320px;
+  --card-min-h: 280px;
+}
+
+/* Base Reset & Background */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg-mesh);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Floor Constraints: Typography */
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: clamp(2rem, 3.5vw + 1rem, 3.25rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 2vw + 0.8rem, 2.25rem);
+  margin-bottom: 0.6rem;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 1.2vw + 0.6rem, 1.5rem);
+  margin-bottom: 0.5rem;
+}
+
+p, li, span, input, select, textarea {
+  font-size: 1rem; /* >= 15px floor */
+  line-height: 1.65;
+}
+
+.text-sm {
+  font-size: 0.9375rem; /* ~15px absolute floor */
+  color: var(--text-body);
+}
+
+/* Metadata ONLY: timestamps, versions, unit labels, source tags.
+   Never use for card body copy. That is the Slate-400 trap. */
+.text-meta {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Mandatory lead-in phrase opening each card paragraph. */
+.lead-in {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.text-xs {
+  font-size: 0.8125rem; /* Only for micro badges/timestamps */
+  color: var(--text-muted);
+}
+
+.text-mono {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 2.5rem 1.75rem 4rem;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  margin-bottom: 40px;
+  background: var(--surface-glass);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.site-nav__brand {
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-nav__links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.site-nav__link {
+  color: var(--text-body);
+  text-decoration: none;
+}
+
+.site-nav__link[aria-current="page"] {
+  color: var(--cyan);
+  border-color: rgba(6, 182, 212, 0.35);
+  background: var(--cyan-subtle);
+}
+
+.page-hero {
+  margin-bottom: 48px;
+}
+
+.page-hero__summary {
+  max-width: 860px;
+  color: var(--text-body);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+/* Reusable responsive toolbars for dashboards and graph workbenches. */
+.app-toolbar,
+.page-heading-toolbar,
+.canvas-toolbar,
+.app-toolbar__group,
+.toolbar-actions,
+.canvas-toolbar__badges {
+  min-width: 0;
+}
+
+.app-toolbar__group--wrap,
+.toolbar-actions,
+.canvas-toolbar__badges {
+  flex-wrap: wrap;
+}
+
+.app-toolbar__brand {
+  flex: 0 0 auto;
+}
+
+.canvas-toolbar__meta {
+  max-width: 28ch;
+  overflow-wrap: anywhere;
+}
+
+/* Glassmorphism Card System */
+.glass-card {
+  position: relative;
+  background: var(--card-fill);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: var(--space-card);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease;
+  overflow: hidden;
+}
+
+.glass-card:hover {
+  transform: translateY(-6px);
+  background: var(--card-fill-hover);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--border-hover);
+}
+
+/* Corner light cone. Makes a card read as a lit object, not a flat rectangle. */
+.glass-card::after {
+  content: '';
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  right: -48px;
+  top: -70px;
+  background: radial-gradient(circle, var(--card-corner-glow), transparent 70%);
+  pointer-events: none;
+}
+
+/* Card Top Accent Stripes */
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: transparent;
+  transition: opacity 0.25s ease;
+}
+
+.stripe-cyan::before {
+  background: linear-gradient(90deg, var(--cyan) 0%, rgba(6, 182, 212, 0.1) 100%);
+  --card-glow: var(--cyan-glow);
+}
+
+.stripe-amber::before {
+  background: linear-gradient(90deg, var(--amber) 0%, rgba(245, 158, 11, 0.1) 100%);
+  --card-glow: var(--amber-glow);
+}
+
+.stripe-violet::before {
+  background: linear-gradient(90deg, var(--violet) 0%, rgba(139, 92, 246, 0.1) 100%);
+  --card-glow: var(--violet-glow);
+}
+
+.stripe-rose::before {
+  background: linear-gradient(90deg, var(--rose) 0%, rgba(244, 63, 94, 0.1) 100%);
+  --card-glow: var(--rose-glow);
+}
+
+.stripe-emerald::before {
+  background: linear-gradient(90deg, var(--emerald) 0%, rgba(16, 185, 129, 0.1) 100%);
+  --card-glow: var(--emerald-glow);
+}
+
+/* Grid Layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: var(--gap-grid);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--gap-grid);
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--gap-grid);
+}
+
+.grid-2 > *, .grid-3 > *, .grid-4 > *, .bento-grid > * {
+  min-width: 0;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap-grid);
+}
+
+.col-span-12 { grid-column: span 12; }
+.col-span-8  { grid-column: span 8; }
+.col-span-6  { grid-column: span 6; }
+.col-span-4  { grid-column: span 4; }
+.col-span-3  { grid-column: span 3; }
+
+@media (max-width: 960px) {
+  .col-span-8, .col-span-6, .col-span-4, .col-span-3 {
+    grid-column: span 12;
+  }
+}
+
+/* Badges & Status Pills */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.28rem 0.8rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.badge-cyan {
+  background: var(--cyan-subtle);
+  border-color: rgba(6, 182, 212, 0.35);
+  color: var(--cyan);
+}
+
+.badge-amber {
+  background: var(--amber-subtle);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: var(--amber);
+}
+
+.badge-violet {
+  background: var(--violet-subtle);
+  border-color: rgba(139, 92, 246, 0.35);
+  color: var(--violet);
+}
+
+.badge-emerald {
+  background: var(--emerald-subtle);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: var(--emerald);
+}
+
+.badge-rose {
+  background: var(--rose-subtle);
+  border-color: rgba(244, 63, 94, 0.35);
+  color: var(--rose);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--cyan) 0%, #0284c7 100%);
+  color: #040812;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px var(--cyan-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--cyan-glow);
+  filter: brightness(1.1);
+}
+
+.btn-glass {
+  background: var(--surface-1);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: var(--blur-glass);
+}
+
+.btn-glass:hover {
+  background: var(--surface-2);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+/* Metric Display Cards */
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.metric-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.delta-up { color: var(--emerald); }
+.delta-down { color: var(--rose); }
+
+/* SVG Dynamic Beams & Graph Lines */
+.beam-line {
+  stroke-dasharray: 8 12;
+  animation: beam-flow 25s linear infinite;
+}
+
+.beam-line-reverse {
+  stroke-dasharray: 8 12;
+  animation: beam-flow-reverse 25s linear infinite;
+}
+
+@keyframes beam-flow {
+  from { stroke-dashoffset: 400; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes beam-flow-reverse {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 400; }
+}
+
+.svg-node {
+  transition: transform 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.svg-node:hover {
+  filter: drop-shadow(0 0 12px var(--cyan-glow));
+}
+
+/* ==========================================================================
+   Card-ness Reinforcement Components
+   ========================================================================== */
+
+/* Numbered chip for entrance/portal cards. */
+.num-chip {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 1.125rem;
+  background: var(--cyan-subtle);
+  color: var(--cyan);
+}
+.stripe-amber .num-chip { background: var(--amber-subtle); color: var(--amber); }
+.stripe-violet .num-chip { background: var(--violet-subtle); color: var(--violet); }
+.stripe-emerald .num-chip { background: var(--emerald-subtle); color: var(--emerald); }
+.stripe-rose .num-chip { background: var(--rose-subtle); color: var(--rose); }
+
+/* Portal card: entrance tile with enforced height so it reads as a slab. */
+.portal-card {
+  display: flex;
+  flex-direction: column;
+  min-height: var(--card-min-h);
+  text-decoration: none;
+  color: inherit;
+}
+.portal-card p { flex: 1; color: var(--text-body); }
+.portal-card .go {
+  margin-top: 1.125rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Nested inset block: a card inside a card. Replaces prose paragraphs. */
+.card-inset {
+  background: var(--card-inset-fill);
+  border: 1px solid var(--card-inset-border);
+  border-radius: var(--radius-inset);
+  padding: 15px 16px;
+}
+.inset-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+/* Key-value pair: replacement for two-or-more-sentence card copy. */
+.kv-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.kv-row:last-child { border-bottom: none; }
+.kv-key { font-size: 0.9375rem; color: var(--text-secondary); }
+.kv-val { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+
+/* Feature pill with checkmark: breaks up enumerated prose. */
+.feature-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-body);
+  font-size: 0.9375rem;
+}
+.feature-pill::before { content: '✔'; color: var(--emerald); }
+
+/* SVG container: never place a bare svg element on the page background. */
+.svg-shell {
+  border-radius: 24px;
+  padding: 14px;
+  background: radial-gradient(520px 180px at 18% 0, rgba(56, 189, 248, 0.10), transparent 62%),
+              linear-gradient(180deg, #08141e, #0a1724);
+  border: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+}
+.svg-shell svg { display: block; width: 100%; height: auto; font-family: var(--font-body); }
+
+/* Canonical diagram card and full-screen viewer. Use these together instead
+   of inventing page-specific graph chrome. */
+.diagram-card {
+  padding: 32px;
+}
+
+.diagram-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.diagram-card__heading {
+  min-width: 0;
+}
+
+.diagram-card__title {
+  margin: 8px 0 6px;
+}
+
+.diagram-card__hint {
+  color: var(--text-body);
+  max-width: 760px;
+}
+
+.diagram-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.diagram-expand {
+  flex: 0 0 auto;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.diagram-lightbox[hidden] {
+  display: none !important;
+}
+
+.diagram-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(2, 6, 14, 0.90);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.diagram-lightbox__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(1600px, calc(100vw - 48px));
+  height: min(920px, calc(100vh - 48px));
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-hero);
+  background: var(--card-fill);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.72), 0 0 42px var(--cyan-glow);
+}
+
+.diagram-lightbox__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.diagram-lightbox__title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.diagram-lightbox__stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 24px;
+  background: radial-gradient(720px 260px at 20% 0, rgba(6, 182, 212, 0.12), transparent 64%),
+              linear-gradient(180deg, #07111d, #080d17);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.diagram-lightbox__stage svg {
+  display: block;
+  width: 100%;
+  min-width: 980px;
+  height: auto;
+  font-family: var(--font-body);
+}
+
+body.diagram-modal-open {
+  overflow: hidden;
+}
+
+/* SVG typography floors. viewBox units shrink on render, so these sit well
+   above the HTML floors. Apply as classes, never inline a smaller size. */
+.svg-title { font-size: 22px; font-weight: 800; fill: #ffffff; }
+.svg-title-lg { font-size: 26px; font-weight: 800; fill: #ffffff; }
+.svg-sub { font-size: 15px; fill: #cbd5e1; }
+.svg-kicker { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; }
+.svg-edge-label { font-size: 14px; fill: #e2e8f0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile Ergonomics & Anti-Clipping Overrides
+   Eliminates nested card padding traps and maximizes readable width on mobile.
+   ========================================================================== */
+.section-card {
+  position: relative;
+  background: var(--surface-glass);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --space-card: 16px;
+    --gap-grid: 12px;
+    --radius-card: 18px;
+    --radius-hero: 22px;
+  }
+
+  .container {
+    padding: 1.25rem 12px 3.5rem !important;
+  }
+
+  .site-nav {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+    margin-bottom: 28px;
+    border-radius: 18px;
+  }
+
+  .site-nav__links {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .site-nav__link {
+    min-height: 44px;
+  }
+
+  .page-hero {
+    margin-bottom: 36px;
+  }
+
+  .app-toolbar,
+  .page-heading-toolbar,
+  .canvas-toolbar {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .app-toolbar__group {
+    align-items: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  .app-toolbar__brand {
+    width: 100%;
+  }
+
+  .toolbar-actions,
+  .canvas-toolbar__badges {
+    width: 100%;
+  }
+
+  .toolbar-actions .btn {
+    flex: 1 1 140px;
+  }
+
+  .canvas-toolbar {
+    padding: 16px !important;
+  }
+
+  .canvas-toolbar__meta {
+    max-width: 100%;
+  }
+
+  /* Flatten outer section wrapper on mobile to eliminate double-nested card squeeze */
+  .section-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-bottom: 2.5rem !important;
+  }
+
+  .glass-card {
+    padding: 18px 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .diagram-card {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .diagram-card::before,
+  .diagram-card::after {
+    display: none !important;
+  }
+
+  .diagram-card__header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding: 0 2px;
+  }
+
+  .diagram-card__hint {
+    line-height: 1.55;
+  }
+
+  .diagram-card__actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .btn,
+  .diagram-expand {
+    min-height: 44px;
+  }
+
+  .grid-4, .grid-3, .grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .portal-card {
+    min-height: auto !important;
+    padding: 18px 16px !important;
+  }
+
+  .inset-row {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .card-inset {
+    padding: 12px 10px !important;
+  }
+  .card-inset div {
+    font-size: 1.4rem !important;
+  }
+
+  .kv-row {
+    gap: 0.5rem !important;
+    padding: 0.5rem 0 !important;
+    flex-wrap: wrap !important;
+  }
+  .kv-key {
+    font-size: 0.9375rem !important;
+  }
+  .kv-val {
+    font-size: 0.9375rem !important;
+    text-align: right !important;
+    word-break: break-word !important;
+    flex: 1 !important;
+    min-width: 120px !important;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+    line-height: 1.25 !important;
+  }
+  h2 {
+    font-size: 1.75rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .svg-shell {
+    padding: 10px !important;
+    border-radius: 16px !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .svg-shell svg {
+    min-width: 860px !important;
+  }
+
+  .diagram-lightbox {
+    padding: 0;
+  }
+
+  .diagram-lightbox__panel {
+    width: 100vw;
+    height: 100dvh;
+    border: none;
+    border-radius: 0;
+  }
+
+  .diagram-lightbox__header {
+    padding: 12px;
+  }
+
+  .diagram-lightbox__stage {
+    padding: 12px;
+  }
+
+  .diagram-lightbox__stage svg {
+    min-width: 980px;
+  }
+
+  code,
+  .text-mono,
+  .kv-key,
+  .kv-val {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}

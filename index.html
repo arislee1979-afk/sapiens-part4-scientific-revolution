@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人類簡史 第四部分 科學革命 · 知識層</title>
+  <meta name="description" content="《人類簡史》第四部分科學革命的 canonical 知識來源與呈現層：認識論門檻、三位一體迴圈、能源與增長、快樂與智人末日。">
+  <link rel="stylesheet" href="./tokens.css">
+  <script src="./diagram-lightbox.js" defer></script>
+  <style>
+    /* Page-local extensions only. No competing :root token layer. */
+    .section { margin-bottom: 4rem; }
+    .section-head { margin-bottom: 1.5rem; }
+    .section-head .badge { margin-bottom: 0.75rem; }
+    .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 1.25rem; }
+    .legend-item { display: inline-flex; align-items: center; gap: 8px; color: var(--text-body); font-size: 0.9375rem; }
+    .legend-swatch { width: 26px; height: 0; border-top: 3px dashed var(--amber); flex: 0 0 auto; }
+    .legend-swatch--solid { border-top-style: solid; border-top-color: var(--cyan); }
+
+    .id-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600;
+      padding: 0.2rem 0.6rem; border-radius: var(--radius-pill);
+      background: var(--cyan-subtle); border: 1px solid rgba(6,182,212,.35); color: var(--cyan);
+      overflow-wrap: anywhere;
+    }
+    .id-chip--violet { background: var(--violet-subtle); border-color: rgba(139,92,246,.35); color: var(--violet); }
+    .id-chip--rose { background: var(--rose-subtle); border-color: rgba(244,63,94,.35); color: var(--rose); }
+    .id-chip--amber { background: var(--amber-subtle); border-color: rgba(245,158,11,.35); color: var(--amber); }
+
+    .mono-wrap { font-family: var(--font-mono); font-size: 0.875rem; overflow-wrap: anywhere; word-break: break-word; }
+
+    .data-matrix { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9375rem; }
+    .data-matrix caption {
+      caption-side: top; text-align: left; color: var(--text-secondary);
+      font-size: 0.875rem; padding-bottom: 0.75rem;
+    }
+    .data-matrix th {
+      text-align: left; font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-secondary);
+      padding: 0.7rem 0.85rem; background: var(--card-inset-fill);
+      border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);
+    }
+    .data-matrix td {
+      padding: 0.75rem 0.85rem; vertical-align: top; color: var(--text-body);
+      border-bottom: 1px solid var(--border-subtle); line-height: 1.6;
+    }
+    .data-matrix tbody tr:last-child td { border-bottom: none; }
+    .data-matrix td:first-child { white-space: nowrap; }
+    .status { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600; }
+    .status--fact { color: var(--emerald); }
+    .status--inference { color: var(--amber); }
+    .status--unknown { color: var(--rose); }
+    .table-scroll { overflow-x: auto; }
+
+    .kv-stack { display: flex; flex-direction: column; gap: 0; }
+    .node-card { display: flex; flex-direction: column; gap: 0.75rem; }
+    .node-card h3 { margin: 0; }
+
+    .q-card { display: flex; flex-direction: column; gap: 0.9rem; }
+    .q-card h3 { margin: 0; }
+
+    .page-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 1.75rem; margin-top: 1rem;
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .link-quiet { color: var(--text-body); text-decoration: none; font-size: 0.9375rem; }
+    .link-quiet:hover { color: var(--cyan); }
+    .link-strong {
+      color: var(--cyan); text-decoration: none; font-weight: 600; font-size: 0.9375rem;
+      border-bottom: 1px solid rgba(6,182,212,.4); padding-bottom: 1px;
+    }
+    .link-strong:hover { border-bottom-color: var(--cyan); }
+
+    .svg-caption { color: var(--text-body); max-width: 900px; margin-top: 1rem; }
+    @media (max-width: 768px) {
+      .section { margin-bottom: 2.75rem; }
+      .data-matrix td:first-child { white-space: normal; }
+    }
+  
+    /* ================= Layout shell: sticky left TOC + narrow reading column ================ */
+    .shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 34px; align-items: start; max-width: 1180px; }
+    .main { min-width: 0; }
+    .reading { max-width: 900px; }
+    .toc {
+      position: sticky; top: 18px; max-height: calc(100vh - 36px); overflow-y: auto;
+      overscroll-behavior: contain; padding: 18px 16px; border-radius: var(--radius-card);
+      background: var(--surface-glass); backdrop-filter: var(--blur-glass);
+      -webkit-backdrop-filter: var(--blur-glass); border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+    }
+    .toc__brand { display: block; margin-bottom: 0.9rem; }
+    .toc__summary {
+      cursor: pointer; list-style: none; font-family: var(--font-mono); font-size: 0.8125rem;
+      font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--text-secondary); padding: 4px 0 10px;
+    }
+    .toc__summary::-webkit-details-marker { display: none; }
+    .toc__chev { display: inline-block; margin-right: 6px; transition: transform 0.2s ease; }
+    .toc__details[open] .toc__chev { transform: rotate(180deg); }
+    .toc__group {
+      font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-muted); margin: 14px 0 6px;
+    }
+    .toc__group:first-of-type { margin-top: 0; }
+    .toc__link {
+      display: block; padding: 6px 10px; border-radius: var(--radius-pill); color: var(--text-body);
+      text-decoration: none; font-size: 0.9375rem; line-height: 1.45; border: 1px solid transparent;
+    }
+    .toc__link:hover { color: var(--text-primary); background: var(--card-inset-fill); }
+    .toc__link.is-active { color: var(--cyan); background: var(--cyan-subtle); border-color: rgba(6,182,212,0.35); }
+    .toc__link .toc__num { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--text-muted); margin-right: 6px; }
+    .toc__link.is-active .toc__num { color: var(--cyan); }
+
+    .container { padding-top: 1.75rem; }
+    body { font-size: 15px; }
+    p, li, span, input, select, textarea { font-size: 0.9375rem; }
+    h1 { font-size: clamp(2rem, 1.8vw + 0.8rem, 2.75rem); }
+    h2 { font-size: clamp(1.75rem, 1vw + 0.6rem, 2rem); }
+    h3 { font-size: clamp(1.25rem, 0.6vw + 0.4rem, 1.35rem); }
+    .page-hero { margin-bottom: 34px; }
+    .page-hero__summary { font-size: 1rem; line-height: 1.7; max-width: 760px; }
+    .section { margin-bottom: 3rem; }
+    .section-head { margin-bottom: 1.25rem; }
+    .glass-card { padding: 24px; }
+    .diagram-card { padding: 24px; }
+    .diagram-card__header { margin-bottom: 18px; }
+    .svg-caption { font-size: 0.9375rem; line-height: 1.6; }
+    .metric-value { font-size: 2rem; }
+    .data-matrix th, .data-matrix td { padding: 0.6rem 0.7rem; }
+    .kv-row { padding: 0.5rem 0; }
+    .card-inset { padding: 14px; }
+
+    @media (max-width: 1080px) {
+      .shell { grid-template-columns: 1fr; gap: 20px; max-width: 900px; }
+      .toc { position: static; max-height: none; }
+      .reading { max-width: none; }
+    }
+    @media (max-width: 768px) { .shell { gap: 14px; } .toc { padding: 14px 12px; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <nav class="site-nav">
+      <a class="site-nav__brand" href="#top">人類簡史 · 科學革命</a>
+      <div class="site-nav__links">
+        <a class="site-nav__link" href="#crosscheck">雙源比對</a>
+        <a class="site-nav__link" href="#claims">主張</a>
+        <a class="site-nav__link" href="#sources">來源</a>
+      </div>
+    </nav>
+  <div class="shell">
+    <aside class="toc" aria-label="專題目錄">
+      <a class="site-nav__brand toc__brand" href="#top">人類簡史 · 科學革命</a>
+      <details class="toc__details" open>
+        <summary class="toc__summary"><span class="toc__chev" aria-hidden="true">▾</span>章節目錄</summary>
+        <nav class="toc__nav" id="toc-nav">
+          <p class="toc__group">入門</p>
+          <a class="toc__link" href="#questions"><span class="toc__num">00</span>讀者與問題</a>
+          <p class="toc__group">四個問題的圖</p>
+          <a class="toc__link" href="#d1"><span class="toc__num">D1</span>認識論門檻</a>
+          <a class="toc__link" href="#d2"><span class="toc__num">D2</span>三位一體迴圈</a>
+          <a class="toc__link" href="#d3"><span class="toc__num">D3</span>能源與增長</a>
+          <a class="toc__link" href="#d4"><span class="toc__num">D4</span>快樂三解釋</a>
+          <a class="toc__link" href="#d5"><span class="toc__num">D5</span>智人末日</a>
+          <p class="toc__group">雙源比對</p>
+          <a class="toc__link" href="#crosscheck"><span class="toc__num">D6</span>雙源覆蓋圖</a>
+          <a class="toc__link" href="#matrix"><span class="toc__num">·</span>覆蓋矩陣</a>
+          <a class="toc__link" href="#s5only"><span class="toc__num">·</span>影片筆記獨有</a>
+          <a class="toc__link" href="#conflicts"><span class="toc__num">·</span>衝突與待驗證</a>
+          <a class="toc__link" href="#sidenumbers"><span class="toc__num">·</span>單邊數字</a>
+          <p class="toc__group">證據層</p>
+          <a class="toc__link" href="#claims"><span class="toc__num">·</span>主張與未知</a>
+          <a class="toc__link" href="#resonance"><span class="toc__num">·</span>讀者共鳴</a>
+          <a class="toc__link" href="#graph"><span class="toc__num">·</span>節點與關係</a>
+          <p class="toc__group">邊界</p>
+          <a class="toc__link" href="#sources"><span class="toc__num">·</span>來源</a>
+          <a class="toc__link" href="#limits"><span class="toc__num">·</span>限制與下一步</a>
+        </nav>
+      </details>
+    </aside>
+    <main class="main">
+
+    <div class="reading">
+    <header class="page-hero" id="top">
+      <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.9rem; flex-wrap:wrap;">
+        <span class="badge badge-violet">知識來源呈現層</span>
+        <span class="badge badge-cyan"><span class="pulse-dot"></span> canonical 已驗證</span>
+        <span class="text-mono text-xs">第四部分 · 第14–20章與後記</span>
+      </div>
+      <h1>科學革命：承認無知之後，人類拿到了什麼、又押上了什麼</h1>
+      <p class="page-hero__summary">
+        <b class="lead-in">本頁定位：</b>這是 <code class="mono-wrap">人類簡史_第四部分科學革命_知識來源.md</code> 的呈現層，
+        Markdown + Mermaid 才是唯一 canonical source。本頁只負責把來源講清楚，不建立第二份事實權威；
+        所有節點 ID 與 Mermaid 圖一致，改內容請回到來源檔再重建。
+      </p>
+      <p class="text-meta" style="margin-top:1rem;">
+        <b class="lead-in">專題範圍：</b><code class="mono-wrap">topics/大歷史/</code> 只處理赫拉利三部曲；本頁目前只做《人類簡史》第四部分。
+      </p>
+    </header>
+
+    <div class="grid-4" style="margin-bottom:4rem;">
+      <div class="glass-card stripe-cyan metric-card">
+        <span class="metric-label">章節跨度</span>
+        <span class="metric-value">8</span>
+        <span class="text-meta">第14–20章＋後記</span>
+      </div>
+      <div class="glass-card stripe-violet metric-card">
+        <span class="metric-label">事實主張</span>
+        <span class="metric-value">16</span>
+        <span class="text-meta">全部標註 FACT／INFERENCE／UNKNOWN</span>
+      </div>
+      <div class="glass-card stripe-amber metric-card">
+        <span class="metric-label">推論與未知</span>
+        <span class="metric-value">6</span>
+        <span class="text-meta">I1–I2、U1–U4</span>
+      </div>
+      <div class="glass-card stripe-emerald metric-card">
+        <span class="metric-label">圖表</span>
+        <span class="metric-value">5</span>
+        <span class="text-meta">D1–D5，Mermaid 與 SVG 同 ID</span>
+      </div>
+    </div>
+
+    <!-- ============ 讀者與問題 ============ -->
+    <section class="section" id="questions">
+      <div class="section-head">
+        <span class="badge badge-cyan">讀者與問題</span>
+        <h2>這份知識要回答的四個問題</h2>
+        <p class="text-sm">
+          <b class="lead-in">先問再畫：</b>每張圖只回答一個問題；關係表列出圖上放不下的條件與依據。
+        </p>
+      </div>
+      <div class="grid-2">
+        <div class="glass-card stripe-cyan q-card">
+          <span class="id-chip">Q1</span>
+          <h3>科學革命憑什麼突破前現代知識體系？</h3>
+          <p class="text-sm"><b class="lead-in">認識論門檻：</b>把「我們不知道」從個人缺陷升級成體系屬性。</p>
+        </div>
+        <div class="glass-card stripe-violet q-card">
+          <span class="id-chip id-chip--violet">Q2</span>
+          <h3>科學、帝國、資本如何互相供養？</h3>
+          <p class="text-sm"><b class="lead-in">三位一體迴圈：</b>不是三條平行線，而是互相供能的閉環，並有明確排氣口。</p>
+        </div>
+        <div class="glass-card stripe-amber q-card">
+          <span class="id-chip id-chip--amber">Q3</span>
+          <h3>能源與原料「有限」為何沒讓經濟停下來？</h3>
+          <p class="text-sm"><b class="lead-in">限制只在無知：</b>熱能轉動能之後，能源從水庫變成海洋。</p>
+        </div>
+        <div class="glass-card stripe-emerald q-card">
+          <span class="id-chip">Q4</span>
+          <h3>能力暴增之後，快樂與「智人」本身發生什麼事？</h3>
+          <p class="text-sm"><b class="lead-in">兩個開口：</b>快樂的定義未定；「人」的定義即將被改寫。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ D1 ============ -->
+    <section class="section" id="d1">
+      <div class="section-head">
+        <span class="badge badge-cyan">D1 · 回答 Q1</span>
+        <h2>科學革命的認識論門檻</h2>
+        <p class="text-sm">
+          <b class="lead-in">斷裂點：</b>前現代體系只承認兩種無知；現代科學承認整套體系對最重要的問題無知。
+          為了讓社會不因此崩潰，又退回兩種「不科學」的支柱。
+        </p>
+      </div>
+
+      <section class="glass-card diagram-card" data-diagram-card data-diagram-title="D1 科學革命的認識論門檻">
+        <div class="diagram-card__header">
+          <div class="diagram-card__heading">
+            <span class="badge badge-cyan">Mermaid ID：ancient / m1 / m2 / m3 / o1 / o2</span>
+            <h3 class="diagram-card__title">從兩種無知到承認無知</h3>
+            <p class="diagram-card__hint"><b class="lead-in">閱讀方式：</b>左欄是前現代的兩種無知，中欄是現代科學的三個特徵，右欄是為穩定而退回的兩根支柱。</p>
+          </div>
+          <div class="diagram-card__actions">
+            <button class="btn btn-primary diagram-expand" type="button" data-diagram-open aria-label="全螢幕開啟 D1 認識論門檻圖">放大圖示</button>
+          </div>
+        </div>
+
+        <div class="svg-shell" tabindex="0" role="button" aria-label="點擊以全螢幕開啟 D1 認識論門檻圖">
+          <svg viewBox="0 0 1150 480" role="img" aria-label="D1：前現代知識體系的兩種無知，經斷裂進入現代科學的三個特徵，並以虛線退回兩種不科學支柱">
+            <defs>
+              <filter id="d1glow" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="3.5" result="b"/>
+                <feComposite in="SourceGraphic" in2="b" operator="over"/>
+              </filter>
+              <marker id="d1arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#7dd3fc"/>
+              </marker>
+              <marker id="d1dash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#fbbf24"/>
+              </marker>
+            </defs>
+
+            <!-- subgraph: ancient -->
+            <rect x="30" y="50" width="300" height="272" rx="22" fill="rgba(148,163,184,0.06)" stroke="rgba(148,163,184,0.28)" stroke-width="1.6"/>
+            <text x="54" y="84" class="svg-kicker" fill="#a3b8cc">前現代知識體系</text>
+
+            <g class="svg-node">
+              <rect x="54" y="96" width="252" height="96" rx="18" fill="#141a29" stroke="rgba(148,163,184,0.35)" stroke-width="1.8"/>
+              <text x="72" y="128" class="svg-title">個人無知</text>
+              <text x="72" y="156" class="svg-sub">重要的事去問牧師</text>
+              <text x="72" y="178" class="svg-sub">與經典即可</text>
+            </g>
+            <g class="svg-node">
+              <rect x="54" y="204" width="252" height="96" rx="18" fill="#141a29" stroke="rgba(148,163,184,0.35)" stroke-width="1.8"/>
+              <text x="72" y="236" class="svg-title">體系無知</text>
+              <text x="72" y="264" class="svg-sub">神懶得告訴我們，</text>
+              <text x="72" y="286" class="svg-sub">代表這件事不重要</text>
+            </g>
+
+            <!-- edge: ancient -> m1 -->
+            <path d="M 330 144 H 400" stroke="#06b6d4" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d1arrow)" filter="url(#d1glow)"/>
+            <text x="365" y="130" class="svg-edge-label" text-anchor="middle">斷裂</text>
+
+            <!-- subgraph: modern -->
+            <rect x="390" y="50" width="340" height="380" rx="22" fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.30)" stroke-width="1.6"/>
+            <text x="414" y="84" class="svg-kicker" fill="#67e8f9">現代科學</text>
+
+            <g class="svg-node">
+              <rect x="414" y="96" width="292" height="96" rx="18" fill="#0d2230" stroke="rgba(6,182,212,0.55)" stroke-width="2.2"/>
+              <text x="434" y="128" class="svg-title">ignoramus</text>
+              <text x="434" y="156" class="svg-sub">整套體系對最重要</text>
+              <text x="434" y="178" class="svg-sub">的問題一無所知</text>
+            </g>
+            <g class="svg-node">
+              <rect x="414" y="214" width="292" height="88" rx="18" fill="#0d2230" stroke="rgba(6,182,212,0.45)" stroke-width="1.8"/>
+              <text x="434" y="246" class="svg-title">觀察與數學</text>
+              <text x="434" y="274" class="svg-sub">經驗整理成理論</text>
+            </g>
+            <g class="svg-node">
+              <rect x="414" y="324" width="292" height="88" rx="18" fill="#0d2230" stroke="rgba(6,182,212,0.45)" stroke-width="1.8"/>
+              <text x="434" y="356" class="svg-title">取得新能力</text>
+              <text x="434" y="384" class="svg-sub">能造出新東西才算知識</text>
+            </g>
+
+            <path d="M 560 192 V 214" stroke="#06b6d4" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d1arrow)" filter="url(#d1glow)"/>
+            <path d="M 560 302 V 324" stroke="#06b6d4" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d1arrow)" filter="url(#d1glow)"/>
+
+            <!-- dashed edges: m1 -> o1 / o2 -->
+            <path d="M 706 145 C 762 145, 762 258, 814 258" stroke="#f59e0b" stroke-width="2.6" fill="none" stroke-dasharray="8 9" marker-end="url(#d1dash)"/>
+            <path d="M 706 170 C 782 170, 782 368, 814 368" stroke="#f59e0b" stroke-width="2.6" fill="none" stroke-dasharray="8 9" marker-end="url(#d1dash)"/>
+
+            <!-- subgraph: order -->
+            <rect x="790" y="50" width="330" height="380" rx="22" fill="rgba(245,158,11,0.07)" stroke="rgba(245,158,11,0.30)" stroke-width="1.6"/>
+            <text x="814" y="84" class="svg-kicker" fill="#fcd34d">社會秩序的兩種不科學支柱</text>
+
+            <g class="svg-node">
+              <rect x="814" y="214" width="282" height="88" rx="18" fill="#2a1e0d" stroke="rgba(245,158,11,0.55)" stroke-width="2"/>
+              <text x="834" y="246" class="svg-title">絕對真理化</text>
+              <text x="834" y="274" class="svg-sub">宣稱科學理論即真理</text>
+            </g>
+            <g class="svg-node">
+              <rect x="814" y="324" width="282" height="88" rx="18" fill="#2a1e0d" stroke="rgba(245,158,11,0.55)" stroke-width="2"/>
+              <text x="834" y="356" class="svg-title">非科學絕對真理</text>
+              <text x="834" y="384" class="svg-sub">訴諸人權等意識形態</text>
+            </g>
+          </svg>
+        </div>
+
+        <p class="svg-caption">
+          <b class="lead-in">圖例：</b>實線光束＝推進關係；<span class="legend" style="display:inline-flex;margin:0 0 0 4px;"><span class="legend-item"><span class="legend-swatch"></span>虛線＝為了維持穩定而退回不科學的前提</span></span>
+        </p>
+      </section>
+    </section>
+
+    <!-- ============ D2 ============ -->
+    <section class="section" id="d2">
+      <div class="section-head">
+        <span class="badge badge-violet">D2 · 回答 Q2</span>
+        <h2>科學、帝國、資本的三位一體迴圈</h2>
+        <p class="text-sm">
+          <b class="lead-in">一台會自我增壓的機器：</b>科學給帝國實用知識，帝國給資本殖民地利潤，資本回頭資助遠征與實驗室。
+          起點是地圖上的空白，排氣口是書中不斷標記的代價。
+        </p>
+      </div>
+
+      <section class="glass-card diagram-card" data-diagram-card data-diagram-title="D2 三位一體回饋迴圈">
+        <div class="diagram-card__header">
+          <div class="diagram-card__heading">
+            <span class="badge badge-violet">Mermaid ID：gap / science / empire / capital / cost</span>
+            <h3 class="diagram-card__title">互相供養的閉環與它的排氣口</h3>
+            <p class="diagram-card__hint"><b class="lead-in">閱讀方式：</b>上方兩道弧是供養方向，外圍粗弓是資本回頭資助，底部是增長不受道德制衡時的出口。</p>
+          </div>
+          <div class="diagram-card__actions">
+            <button class="btn btn-primary diagram-expand" type="button" data-diagram-open aria-label="全螢幕開啟 D2 三位一體迴圈圖">放大圖示</button>
+          </div>
+        </div>
+
+        <div class="svg-shell" tabindex="0" role="button" aria-label="點擊以全螢幕開啟 D2 三位一體迴圈圖">
+          <svg viewBox="0 0 1320 680" role="img" aria-label="D2：科學提供實用知識給帝國，帝國提供殖民地利潤給資本，資本回頭資助遠征與實驗室；地圖空白是起點，代價通道是排氣口">
+            <defs>
+              <filter id="d2glow" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="4" result="b"/>
+                <feComposite in="SourceGraphic" in2="b" operator="over"/>
+              </filter>
+              <marker id="d2arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#7dd3fc"/>
+              </marker>
+              <marker id="d2rose" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#fda4af"/>
+              </marker>
+            </defs>
+
+            <!-- top arcs -->
+            <path d="M 190 50 C 190 8, 660 8, 660 50" stroke="#06b6d4" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d2arrow)" filter="url(#d2glow)"/>
+            <text x="425" y="20" class="svg-edge-label" text-anchor="middle">實用知識</text>
+            <path d="M 660 50 C 660 8, 1130 8, 1130 50" stroke="#8b5cf6" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d2arrow)" filter="url(#d2glow)"/>
+            <text x="895" y="20" class="svg-edge-label" text-anchor="middle">殖民地利潤</text>
+
+            <!-- ring: capital -> science -->
+            <path d="M 1280 125 H 1300 V 620 H 20 V 125 H 40" stroke="#10b981" stroke-width="3.2" fill="none" class="beam-line" marker-end="url(#d2arrow)" filter="url(#d2glow)"/>
+            <text x="650" y="610" class="svg-edge-label" text-anchor="middle">遠征與實驗室經費</text>
+
+            <!-- gap -> empire -->
+            <path d="M 300 400 L 545 205" stroke="#06b6d4" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d2arrow)" filter="url(#d2glow)"/>
+            <text x="248" y="360" class="svg-edge-label">遠征動機</text>
+
+            <!-- capital -> cost -->
+            <path d="M 1130 200 V 386" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d2rose)" filter="url(#d2glow)"/>
+            <text x="1142" y="300" class="svg-edge-label">增長不受道德制衡</text>
+
+            <g class="svg-node">
+              <rect x="40" y="50" width="300" height="150" rx="22" fill="#0d2230" stroke="rgba(6,182,212,0.55)" stroke-width="2.2"/>
+              <text x="64" y="84" class="svg-kicker" fill="#67e8f9">SCIENCE</text>
+              <text x="64" y="122" class="svg-title">科學</text>
+              <text x="64" y="152" class="svg-sub">承認無知並前往尋找</text>
+              <text x="64" y="176" class="svg-sub">庫克遠征即科學遠征</text>
+            </g>
+            <g class="svg-node">
+              <rect x="510" y="50" width="300" height="150" rx="22" fill="#211735" stroke="rgba(139,92,246,0.6)" stroke-width="2.2"/>
+              <text x="534" y="84" class="svg-kicker" fill="#c4b5fd">EMPIRE</text>
+              <text x="534" y="122" class="svg-title">帝國</text>
+              <text x="534" y="152" class="svg-sub">填補地圖上的空白</text>
+              <text x="534" y="176" class="svg-sub">遠征隊必帶科學家</text>
+            </g>
+            <g class="svg-node">
+              <rect x="980" y="50" width="300" height="150" rx="22" fill="#14291f" stroke="rgba(16,185,129,0.6)" stroke-width="2.2"/>
+              <text x="1004" y="84" class="svg-kicker" fill="#6ee7b7">CAPITAL</text>
+              <text x="1004" y="122" class="svg-title">資本</text>
+              <text x="1004" y="152" class="svg-sub">信任未來、利潤再投資</text>
+              <text x="1004" y="176" class="svg-sub">信用預支想象的明天</text>
+            </g>
+            <g class="svg-node">
+              <rect x="40" y="400" width="300" height="140" rx="22" fill="#141a29" stroke="rgba(148,163,184,0.4)" stroke-width="1.8"/>
+              <text x="64" y="434" class="svg-kicker" fill="#a3b8cc">ENTRY</text>
+              <text x="64" y="472" class="svg-title">地圖空白</text>
+              <text x="64" y="500" class="svg-sub">承認對一大部分</text>
+              <text x="64" y="522" class="svg-sub">世界還一無所知</text>
+            </g>
+            <g class="svg-node">
+              <rect x="980" y="400" width="300" height="140" rx="22" fill="#2a111b" stroke="rgba(244,63,94,0.6)" stroke-width="2.2"/>
+              <text x="1004" y="434" class="svg-kicker" fill="#fb7185">EXHAUST</text>
+              <text x="1004" y="472" class="svg-title">代價通道</text>
+              <text x="1004" y="500" class="svg-sub">奴隸貿易、饑荒、</text>
+              <text x="1004" y="522" class="svg-sub">滅族、工業化畜牧</text>
+            </g>
+          </svg>
+        </div>
+
+        <p class="svg-caption">
+          <b class="lead-in">對照來源：</b>關係表另有 5 條配對關係（帝國回報資料與保護給科學、資本投資科學研究、科學提供技術與新能源給資本等）；
+          本圖只保留迴圈主幹，不把「互相強化」畫成網狀雜訊。
+        </p>
+      </section>
+    </section>
+
+    <!-- ============ D3 ============ -->
+    <section class="section" id="d3">
+      <div class="section-head">
+        <span class="badge badge-amber">D3 · 回答 Q3</span>
+        <h2>能源、原料與增長：限制只在無知</h2>
+        <p class="text-sm">
+          <b class="lead-in">從水庫到海洋：</b>工業革命前，人類所有活動最終只能吃植物；蒸汽機把熱能轉成動能之後，
+          能源不再是定量的水庫。農業工業化釋放人力，生產第一次超過需求，於是消費主義接手。
+        </p>
+      </div>
+
+      <section class="glass-card diagram-card" data-diagram-card data-diagram-title="D3 能源原料與增長鏈">
+        <div class="diagram-card__header">
+          <div class="diagram-card__heading">
+            <span class="badge badge-amber">Mermaid ID：old / sun / turn / ocean / mat / agri / surplus / consume</span>
+            <h3 class="diagram-card__title">能量轉換如何解開原料與人力限制</h3>
+            <p class="diagram-card__hint"><b class="lead-in">閱讀方式：</b>上排由左至右，下排由右往回；底部回廊是利潤再投資，讓整條鏈閉合。</p>
+          </div>
+          <div class="diagram-card__actions">
+            <button class="btn btn-primary diagram-expand" type="button" data-diagram-open aria-label="全螢幕開啟 D3 能源與增長鏈圖">放大圖示</button>
+          </div>
+        </div>
+
+        <div class="svg-shell" tabindex="0" role="button" aria-label="點擊以全螢幕開啟 D3 能源與增長鏈圖">
+          <svg viewBox="0 0 1060 470" role="img" aria-label="D3：工業革命前依賴人獸肌肉與植物，經蒸汽機等能源轉換使能源由水庫變海洋，解除原料限制，帶動第二次農業革命、人力釋放，最終由消費主義接手並以利潤再投資閉合迴路">
+            <defs>
+              <filter id="d3glow" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="3.5" result="b"/>
+                <feComposite in="SourceGraphic" in2="b" operator="over"/>
+              </filter>
+              <marker id="d3arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#fcd34d"/>
+              </marker>
+            </defs>
+
+            <path d="M 230 125 H 296" stroke="#f59e0b" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d3arrow)" filter="url(#d3glow)"/>
+            <text x="263" y="110" class="svg-edge-label" text-anchor="middle">唯一來源</text>
+            <path d="M 500 125 H 566" stroke="#f59e0b" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d3arrow)" filter="url(#d3glow)"/>
+            <text x="533" y="110" class="svg-edge-label" text-anchor="middle">突破</text>
+            <path d="M 770 125 H 836" stroke="#f59e0b" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d3arrow)" filter="url(#d3glow)"/>
+            <text x="803" y="110" class="svg-edge-label" text-anchor="middle">解除限制</text>
+            <path d="M 945 190 V 256" stroke="#f59e0b" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d3arrow)" filter="url(#d3glow)"/>
+            <text x="957" y="230" class="svg-edge-label">連帶解決</text>
+
+            <path d="M 850 335 H 784" stroke="#f59e0b" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d3arrow)" filter="url(#d3glow)"/>
+            <text x="817" y="320" class="svg-edge-label" text-anchor="middle">廉價能源</text>
+            <path d="M 580 335 H 514" stroke="#f59e0b" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d3arrow)" filter="url(#d3glow)"/>
+            <text x="547" y="320" class="svg-edge-label" text-anchor="middle">釋放人力</text>
+            <path d="M 310 335 H 244" stroke="#f59e0b" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d3arrow)" filter="url(#d3glow)"/>
+            <text x="277" y="320" class="svg-edge-label" text-anchor="middle">生產過剩</text>
+
+            <path d="M 135 270 V 230 H 675 V 196" stroke="#10b981" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d3arrow)" filter="url(#d3glow)"/>
+            <text x="405" y="222" class="svg-edge-label" text-anchor="middle">利潤再投資</text>
+
+            <g class="svg-node">
+              <rect x="40" y="60" width="190" height="130" rx="20" fill="#2a111b" stroke="rgba(244,63,94,0.5)" stroke-width="2"/>
+              <text x="60" y="92" class="svg-kicker" fill="#fb7185">BEFORE</text>
+              <text x="60" y="126" class="svg-title">工業革命前</text>
+              <text x="60" y="152" class="svg-sub">能量只能來自</text>
+              <text x="60" y="174" class="svg-sub">人獸肌肉與植物</text>
+            </g>
+            <g class="svg-node">
+              <rect x="310" y="60" width="190" height="130" rx="20" fill="#141a29" stroke="rgba(148,163,184,0.4)" stroke-width="1.8"/>
+              <text x="330" y="92" class="svg-kicker" fill="#a3b8cc">PLANT</text>
+              <text x="330" y="126" class="svg-title">植物封裝</text>
+              <text x="330" y="152" class="svg-sub">太陽能決定收成</text>
+              <text x="330" y="174" class="svg-sub">與戰爭的節奏</text>
+            </g>
+            <g class="svg-node">
+              <rect x="580" y="60" width="190" height="130" rx="20" fill="#2a1e0d" stroke="rgba(245,158,11,0.55)" stroke-width="2.2"/>
+              <text x="600" y="92" class="svg-kicker" fill="#fbbf24">TURN</text>
+              <text x="600" y="126" class="svg-title">工業革命</text>
+              <text x="600" y="152" class="svg-sub">熱能轉為動能</text>
+              <text x="600" y="174" class="svg-sub">蒸汽、內燃、電力</text>
+            </g>
+            <g class="svg-node">
+              <rect x="850" y="60" width="190" height="130" rx="20" fill="#0d2230" stroke="rgba(6,182,212,0.55)" stroke-width="2.2"/>
+              <text x="870" y="92" class="svg-kicker" fill="#67e8f9">OCEAN</text>
+              <text x="870" y="126" class="svg-title">能源變海洋</text>
+              <text x="870" y="152" class="svg-sub">太陽 90 分鐘送到</text>
+              <text x="870" y="174" class="svg-sub">地球即等於一年用量</text>
+            </g>
+            <g class="svg-node">
+              <rect x="850" y="270" width="190" height="130" rx="20" fill="#14291f" stroke="rgba(16,185,129,0.55)" stroke-width="2.2"/>
+              <text x="870" y="302" class="svg-kicker" fill="#6ee7b7">MATERIAL</text>
+              <text x="870" y="336" class="svg-title">新材料</text>
+              <text x="870" y="362" class="svg-sub">鋁、塑膠、矽與</text>
+              <text x="870" y="384" class="svg-sub">遠距原料</text>
+            </g>
+            <g class="svg-node">
+              <rect x="580" y="270" width="190" height="130" rx="20" fill="#211735" stroke="rgba(139,92,246,0.55)" stroke-width="2.2"/>
+              <text x="600" y="302" class="svg-kicker" fill="#c4b5fd">AGRI</text>
+              <text x="600" y="336" class="svg-title">第二次農業革命</text>
+              <text x="600" y="362" class="svg-sub">機器、化肥、</text>
+              <text x="600" y="384" class="svg-sub">工業化畜牧</text>
+            </g>
+            <g class="svg-node">
+              <rect x="310" y="270" width="190" height="130" rx="20" fill="#141a29" stroke="rgba(148,163,184,0.4)" stroke-width="1.8"/>
+              <text x="330" y="302" class="svg-kicker" fill="#a3b8cc">SURPLUS</text>
+              <text x="330" y="336" class="svg-title">人力釋放</text>
+              <text x="330" y="362" class="svg-sub">少數農民養活</text>
+              <text x="330" y="384" class="svg-sub">多數非農業人口</text>
+            </g>
+            <g class="svg-node">
+              <rect x="40" y="270" width="190" height="130" rx="20" fill="#2a1e0d" stroke="rgba(245,158,11,0.55)" stroke-width="2.2"/>
+              <text x="60" y="302" class="svg-kicker" fill="#fbbf24">CONSUME</text>
+              <text x="60" y="336" class="svg-title">消費主義接手</text>
+              <text x="60" y="362" class="svg-sub">生產超過需求，</text>
+              <text x="60" y="384" class="svg-sub">購買成為新倫理</text>
+            </g>
+          </svg>
+        </div>
+
+        <p class="svg-caption">
+          <b class="lead-in">边界提醒：</b>資源沒有上限不代表生態沒有上限。書中把「資源不断增加」與「棲地迅速惡化」分開論證，
+          本圖只回答前者。
+        </p>
+      </section>
+    </section>
+
+    <!-- ============ D4 ============ -->
+    <section class="section" id="d4">
+      <div class="section-head">
+        <span class="badge badge-emerald">D4 · 回答 Q4 之一</span>
+        <h2>快樂的三種解釋與一個未決前提</h2>
+        <p class="text-sm">
+          <b class="lead-in">不要畫成已解決：</b>生化機制、期望相符、生命有意義三者互不相容；
+          而它們共同的前提「快樂可由主觀報告測得」本身就可疑。UNKNOWN 出口必須保留。
+        </p>
+      </div>
+
+      <section class="glass-card diagram-card" data-diagram-card data-diagram-title="D4 快樂的三種解釋與未決前提">
+        <div class="diagram-card__header">
+          <div class="diagram-card__heading">
+            <span class="badge badge-emerald">Mermaid ID：q / body / expect / meaning / buddha / premise / unknown</span>
+            <h3 class="diagram-card__title">從「快樂等於什麼」到「能不能測」</h3>
+            <p class="diagram-card__hint"><b class="lead-in">閱讀方式：</b>上層三個分支各自成立，中層匯聚成共同前提，最底層是本章明確留下的 UNKNOWN。</p>
+          </div>
+          <div class="diagram-card__actions">
+            <button class="btn btn-primary diagram-expand" type="button" data-diagram-open aria-label="全螢幕開啟 D4 快樂三解釋圖">放大圖示</button>
+          </div>
+        </div>
+
+        <div class="svg-shell" tabindex="0" role="button" aria-label="點擊以全螢幕開啟 D4 快樂三解釋圖">
+          <svg viewBox="0 0 1280 800" role="img" aria-label="D4：快樂來自哪里的決策點分出生化機制、期望相符、生命有意義三支，匯聚為可由主觀報告測得的共同前提，再由佛教立場否定該前提，最後同抵現代人是否更快樂的未解問題">
+            <defs>
+              <filter id="d4glow" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="3.5" result="b"/>
+                <feComposite in="SourceGraphic" in2="b" operator="over"/>
+              </filter>
+              <marker id="d4arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#6ee7b7"/>
+              </marker>
+              <marker id="d4rose" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#fda4af"/>
+              </marker>
+            </defs>
+
+            <path d="M 590 130 V 165 H 200 V 196" stroke="#10b981" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d4arrow)" filter="url(#d4glow)"/>
+            <text x="395" y="158" class="svg-edge-label" text-anchor="middle">快樂等於快感</text>
+            <path d="M 640 130 V 196" stroke="#10b981" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d4arrow)" filter="url(#d4glow)"/>
+            <text x="652" y="172" class="svg-edge-label">期望決定滿足</text>
+            <path d="M 690 130 V 165 H 1080 V 196" stroke="#10b981" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d4arrow)" filter="url(#d4glow)"/>
+            <text x="885" y="158" class="svg-edge-label" text-anchor="middle">意義與集體錯覺</text>
+
+            <path d="M 200 370 V 416" stroke="#10b981" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d4arrow)" filter="url(#d4glow)"/>
+            <path d="M 640 370 V 416" stroke="#10b981" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d4arrow)" filter="url(#d4glow)"/>
+            <path d="M 1080 370 V 416" stroke="#f59e0b" stroke-width="2.8" fill="none" class="beam-line" marker-end="url(#d4arrow)" filter="url(#d4glow)"/>
+            <text x="1092" y="400" class="svg-edge-label">第四種立場</text>
+
+            <path d="M 300 560 V 616" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d4rose)" filter="url(#d4glow)"/>
+            <text x="312" y="592" class="svg-edge-label">共同前提可疑</text>
+            <path d="M 1080 560 V 616" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d4rose)" filter="url(#d4glow)"/>
+            <text x="1092" y="592" class="svg-edge-label">否定前提</text>
+
+            <g class="svg-node">
+              <rect x="490" y="30" width="300" height="100" rx="20" fill="#14291f" stroke="rgba(16,185,129,0.6)" stroke-width="2.2"/>
+              <text x="512" y="60" class="svg-kicker" fill="#6ee7b7">Q4 · 決策點</text>
+              <text x="512" y="98" class="svg-title">快樂來自哪裡</text>
+            </g>
+            <g class="svg-node">
+              <rect x="30" y="210" width="340" height="160" rx="22" fill="#0d2230" stroke="rgba(6,182,212,0.55)" stroke-width="2.2"/>
+              <text x="54" y="244" class="svg-kicker" fill="#67e8f9">生物學</text>
+              <text x="54" y="282" class="svg-title">快樂恆溫空調</text>
+              <text x="54" y="312" class="svg-sub">血清素、多巴胺、催產素</text>
+              <text x="54" y="336" class="svg-sub">天生開朗者與天生陰鬱者</text>
+              <text x="54" y="358" class="svg-sub">長期落在不同區間</text>
+            </g>
+            <g class="svg-node">
+              <rect x="470" y="210" width="340" height="160" rx="22" fill="#211735" stroke="rgba(139,92,246,0.58)" stroke-width="2.2"/>
+              <text x="494" y="244" class="svg-kicker" fill="#c4b5fd">心理學</text>
+              <text x="494" y="282" class="svg-title">期望與條件相符</text>
+              <text x="494" y="312" class="svg-sub">中獎與車禍都只短期影響</text>
+              <text x="494" y="336" class="svg-sub">順利時期望膨脹，</text>
+              <text x="494" y="358" class="svg-sub">條件改善仍不滿意</text>
+            </g>
+            <g class="svg-node">
+              <rect x="910" y="210" width="340" height="160" rx="22" fill="#2a1e0d" stroke="rgba(245,158,11,0.55)" stroke-width="2.2"/>
+              <text x="934" y="244" class="svg-kicker" fill="#fbbf24">認知與道德</text>
+              <text x="934" y="282" class="svg-title">生命整體有意義</text>
+              <text x="934" y="312" class="svg-sub">養小孩當下苦、回憶卻甜</text>
+              <text x="934" y="336" class="svg-sub">意義可能只是與集體</text>
+              <text x="934" y="358" class="svg-sub">錯覺同步</text>
+            </g>
+            <g class="svg-node">
+              <rect x="30" y="430" width="700" height="130" rx="22" fill="#141a29" stroke="rgba(148,163,184,0.42)" stroke-width="2"/>
+              <text x="54" y="464" class="svg-kicker" fill="#a3b8cc">PREMISE · 共同前提</text>
+              <text x="54" y="502" class="svg-title">快樂可由主觀報告測得</text>
+              <text x="54" y="530" class="svg-sub">自由主義把個人主觀感受當成判斷好壞的權威來源</text>
+              <text x="54" y="552" class="svg-sub">這只是自由主義特有的觀點</text>
+            </g>
+            <g class="svg-node">
+              <rect x="910" y="430" width="340" height="130" rx="22" fill="#14291f" stroke="rgba(16,185,129,0.55)" stroke-width="2.2"/>
+              <text x="934" y="464" class="svg-kicker" fill="#6ee7b7">佛教</text>
+              <text x="934" y="502" class="svg-title">不追求主觀感受</text>
+              <text x="934" y="530" class="svg-sub">苦源於追求感受本身</text>
+              <text x="934" y="552" class="svg-sub">感受如海浪，來了又去</text>
+            </g>
+            <g class="svg-node">
+              <rect x="180" y="620" width="920" height="120" rx="22" fill="#2a111b" stroke="rgba(244,63,94,0.62)" stroke-width="2.4"/>
+              <text x="204" y="654" class="svg-kicker" fill="#fb7185">UNKNOWN · U1</text>
+              <text x="204" y="692" class="svg-title">現代人是否更快樂：本章未解</text>
+              <text x="204" y="720" class="svg-sub">作者明言相關研究才剛起步，要下結論還為時過早</text>
+            </g>
+          </svg>
+        </div>
+
+        <p class="svg-caption">
+          <b class="lead-in">不可壓掉的一格：</b>無論畫面怎麼縮，`unknown` 節點與兩條指向它的邊都必須保留；
+          把這一格改成「答案是更快樂」就是偽造來源沒有的結論。
+        </p>
+      </section>
+    </section>
+
+    <!-- ============ D5 ============ -->
+    <section class="section" id="d5">
+      <div class="section-head">
+        <span class="badge badge-rose">D5 · 回答 Q4 之二</span>
+        <h2>智人末日的三條路徑</h2>
+        <p class="text-sm">
+          <b class="lead-in">正當性來源：</b>三條路徑都掛在吉爾伽美什計劃下面——「為了治療疾病、挽救性命」是無人能反駁的標準答案，
+          也因此擋不住。
+        </p>
+      </div>
+
+      <section class="glass-card diagram-card" data-diagram-card data-diagram-title="D5 智人末日三條路徑">
+        <div class="diagram-card__header">
+          <div class="diagram-card__heading">
+            <span class="badge badge-rose">Mermaid ID：gilgamesh / bio / cyborg / inorganic / replace / unknown</span>
+            <h3 class="diagram-card__title">自然選擇被智慧設計取代</h3>
+            <p class="diagram-card__hint"><b class="lead-in">閱讀方式：</b>單一源頭分出三條工程路線，三者在「取代」節點匯合，末端是未定的時間表。</p>
+          </div>
+          <div class="diagram-card__actions">
+            <button class="btn btn-primary diagram-expand" type="button" data-diagram-open aria-label="全螢幕開啟 D5 智人末日三路徑圖">放大圖示</button>
+          </div>
+        </div>
+
+        <div class="svg-shell" tabindex="0" role="button" aria-label="點擊以全螢幕開啟 D5 智人末日三路徑圖">
+          <svg viewBox="0 0 1280 790" role="img" aria-label="D5：吉爾伽美什計劃分出生物工程、仿生工程、無機生命三條路徑，三者共同使自然選擇被智慧設計取代，末端為時間表與結果未定">
+            <defs>
+              <filter id="d5glow" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="3.5" result="b"/>
+                <feComposite in="SourceGraphic" in2="b" operator="over"/>
+              </filter>
+              <marker id="d5arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#fda4af"/>
+              </marker>
+            </defs>
+
+            <path d="M 520 150 V 190 H 210 V 246" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d5arrow)" filter="url(#d5glow)"/>
+            <path d="M 640 150 V 246" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d5arrow)" filter="url(#d5glow)"/>
+            <path d="M 760 150 V 190 H 1070 V 246" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d5arrow)" filter="url(#d5glow)"/>
+            <path d="M 210 390 V 456" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d5arrow)" filter="url(#d5glow)"/>
+            <path d="M 640 390 V 456" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d5arrow)" filter="url(#d5glow)"/>
+            <path d="M 1070 390 V 456" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d5arrow)" filter="url(#d5glow)"/>
+            <path d="M 640 580 V 626" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d5arrow)" filter="url(#d5glow)"/>
+
+            <g class="svg-node">
+              <rect x="380" y="40" width="520" height="110" rx="22" fill="#2a111b" stroke="rgba(244,63,94,0.62)" stroke-width="2.4"/>
+              <text x="404" y="72" class="svg-kicker" fill="#fb7185">GILGAMESH PROJECT</text>
+              <text x="404" y="106" class="svg-title">吉爾伽美什計劃</text>
+              <text x="404" y="132" class="svg-sub">以治療與救命為名的追求永生，是科學的正當性旗艦</text>
+            </g>
+            <g class="svg-node">
+              <rect x="40" y="250" width="340" height="140" rx="22" fill="#0d2230" stroke="rgba(6,182,212,0.55)" stroke-width="2.2"/>
+              <text x="64" y="284" class="svg-kicker" fill="#67e8f9">BIO · 生物工程</text>
+              <text x="64" y="322" class="svg-title">基因改造</text>
+              <text x="64" y="350" class="svg-sub">絕種動物重現、發光兔</text>
+              <text x="64" y="374" class="svg-sub">延長壽命與改變情緒</text>
+            </g>
+            <g class="svg-node">
+              <rect x="470" y="250" width="340" height="140" rx="22" fill="#211735" stroke="rgba(139,92,246,0.58)" stroke-width="2.2"/>
+              <text x="494" y="284" class="svg-kicker" fill="#c4b5fd">CYBORG · 仿生工程</text>
+              <text x="494" y="322" class="svg-title">有機加無機</text>
+              <text x="494" y="350" class="svg-sub">思想操縱的生化手臂</text>
+              <text x="494" y="374" class="svg-sub">腦機雙向介面</text>
+            </g>
+            <g class="svg-node">
+              <rect x="900" y="250" width="340" height="140" rx="22" fill="#14291f" stroke="rgba(16,185,129,0.55)" stroke-width="2.2"/>
+              <text x="924" y="284" class="svg-kicker" fill="#6ee7b7">INORGANIC · 無機生命</text>
+              <text x="924" y="322" class="svg-title">自行演化</text>
+              <text x="924" y="350" class="svg-sub">突變的計算機病毒</text>
+              <text x="924" y="374" class="svg-sub">完全由程式組成的數字心靈</text>
+            </g>
+            <g class="svg-node">
+              <rect x="300" y="460" width="680" height="120" rx="22" fill="#2a1e0d" stroke="rgba(245,158,11,0.58)" stroke-width="2.2"/>
+              <text x="324" y="494" class="svg-kicker" fill="#fbbf24">REPLACE</text>
+              <text x="324" y="530" class="svg-title">自然選擇被智慧設計取代</text>
+              <text x="324" y="556" class="svg-sub">40 億年演化規則的反轉，起點是一隻發光兔</text>
+            </g>
+            <g class="svg-node">
+              <rect x="300" y="630" width="680" height="110" rx="22" fill="#2a111b" stroke="rgba(244,63,94,0.62)" stroke-width="2.4"/>
+              <text x="324" y="664" class="svg-kicker" fill="#fb7185">UNKNOWN · U2</text>
+              <text x="324" y="698" class="svg-title">時間表與結果未定</text>
+              <text x="324" y="724" class="svg-sub">書中明言預測不可能樣樣準，歷史常有不可預見的阻礙</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+    </section>
+
+    <!-- ============ 主張 ============ -->
+    <section class="section" id="claims">
+      <div class="section-head">
+        <span class="badge badge-cyan">主張、推論與未知</span>
+        <h2>每一條都標了狀態與依據</h2>
+        <p class="text-sm">
+          <b class="lead-in">不混充事實：</b>FACT 表示正文直接支持；INFERENCE 標明推導依據；UNKNOWN 是本章明確沒答案的问题。
+        </p>
+      </div>
+
+      <div class="glass-card stripe-cyan" style="margin-bottom:2.5rem;">
+        <h3 style="margin-bottom:1rem;">事實主張（C1–C16）</h3>
+        <div class="table-scroll">
+          <table class="data-matrix">
+            <caption>共 16 項；依據欄為本機全文的行號區間（LOCAL ONLY）。</caption>
+            <thead>
+              <tr><th>ID</th><th>主張</th><th>狀態</th><th>依據</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="id-chip">C1</span></td><td>現代科學三特徵：願意承認無知、以觀察和數學為中心、取得新能力</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2293–2301</td></tr>
+              <tr><td><span class="id-chip">C2</span></td><td>前現代體系只承認兩種無知</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2303–2309</td></tr>
+              <tr><td><span class="id-chip">C3</span></td><td>科學革命是「無知的革命」</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2301</td></tr>
+              <tr><td><span class="id-chip">C4</span></td><td>維繫穩定只能靠兩種不科學的方法</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2321–2327</td></tr>
+              <tr><td><span class="id-chip">C5</span></td><td>科學無力決定自身優先順序與用途</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2524–2532</td></tr>
+              <tr><td><span class="id-chip">C6</span></td><td>科學與帝國共享心態；庫克遠征兼具科學與武力雙重性</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2543–2561</td></tr>
+              <tr><td><span class="id-chip">C7</span></td><td>歐洲優勢來自現代早期累積的潛力，而非早期科技差距</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2578–2588</td></tr>
+              <tr><td><span class="id-chip">C8</span></td><td>帝國以「進步」為科學正名；種族主義的位置由文化主義取代</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2782–2793</td></tr>
+              <tr><td><span class="id-chip">C9</span></td><td>現代經濟核心是增長；信用建立在對未來的信任上</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2809–2841</td></tr>
+              <tr><td><span class="id-chip">C10</span></td><td>資本主義教條第一條：利潤必須再投資於提高產量</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 2888–2890</td></tr>
+              <tr><td><span class="id-chip">C11</span></td><td>資本與消費主義一體兩面</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 3205–3207</td></tr>
+              <tr><td><span class="id-chip">C12</span></td><td>工業革命核心是能源轉換；限制只在無知</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 3115–3120</td></tr>
+              <tr><td><span class="id-chip">C13</span></td><td>農業工業化是第二次農業革命，釋放人力給工廠與辦公室</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 3142, 3174</td></tr>
+              <tr><td><span class="id-chip">C14</span></td><td>快樂有三種主要解釋，加上佛教的第四種</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 3520–3606</td></tr>
+              <tr><td><span class="id-chip">C15</span></td><td>取代自然選擇的三條路徑：生物工程、仿生工程、無機生命</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 3645, 3797</td></tr>
+              <tr><td><span class="id-chip">C16</span></td><td>團體能力提升不保證個體福祉</td><td><span class="status status--fact">FACT</span></td><td class="mono-wrap">S1 3808–3816</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="glass-card stripe-amber">
+        <h3 style="margin-bottom:1rem;">推論與未知（I1–I2、U1–U4）</h3>
+        <div class="table-scroll">
+          <table class="data-matrix">
+            <caption>共 6 項；UNKNOWN 不允許在呈現層被畫成已解決。</caption>
+            <thead>
+              <tr><th>ID</th><th>內容</th><th>狀態</th><th>依據</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="id-chip id-chip--amber">I1</span></td><td>三位一體是相互強化的迴圈，但書中未量化個別案例的因果權重</td><td><span class="status status--inference">INFERENCE</span></td><td class="mono-wrap">推導：S1 2280、2534、2908</td></tr>
+              <tr><td><span class="id-chip id-chip--amber">I2</span></td><td>庫克遠征的雙重性是本專題最適合的關係圖範本</td><td><span class="status status--inference">INFERENCE</span></td><td class="mono-wrap">推導：S1 2561</td></tr>
+              <tr><td><span class="id-chip id-chip--rose">U1</span></td><td>現代人是否比中世紀或採集者更快樂</td><td><span class="status status--unknown">UNKNOWN</span></td><td class="mono-wrap">S1 3614–3616</td></tr>
+              <tr><td><span class="id-chip id-chip--rose">U2</span></td><td>生物工程／仿生工程／無機生命的時間表與最終結果</td><td><span class="status status--unknown">UNKNOWN</span></td><td class="mono-wrap">S1 3789–3791</td></tr>
+              <tr><td><span class="id-chip id-chip--rose">U3</span></td><td>最佳經濟模式為何</td><td><span class="status status--unknown">UNKNOWN</span></td><td class="mono-wrap">S1 2315</td></tr>
+              <tr><td><span class="id-chip id-chip--rose">U4</span></td><td>S2 記載「最後閱讀章節：第28章」與本書 20 章結構不符，判為匯出端產物</td><td><span class="status status--unknown">UNKNOWN</span></td><td class="mono-wrap">S2 進度欄位</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ S2 讀者共鳴 ============ -->
+    <section class="section" id="resonance">
+      <div class="section-head">
+        <span class="badge badge-violet">S2 · 讀者共鳴</span>
+        <h2>第四部分範圍內的全部 3 則熱門劃線</h2>
+        <p class="text-sm">
+          <b class="lead-in">只列 API 提供的：</b>第四部分跨度只有 3 則熱門劃線，全部列出，不補猜、不湊數。
+        </p>
+      </div>
+      <div class="glass-card stripe-violet">
+        <div class="table-scroll">
+          <table class="data-matrix">
+            <caption>WeRead API 匯出，bookId 855812，exportedAt 2026-09-16 22:41:42。</caption>
+            <thead>
+              <tr><th>章節</th><th>短引用</th><th>讀者劃線數</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>第十六章 資本主義教條</td><td>「真正讓銀行（以及整個經濟）得以存活甚至大發利市的，其實是我們對未來的信任。」</td><td class="mono-wrap">14,580</td></tr>
+              <tr><td>第十九章 從此過著幸福快樂的日子</td><td>「只要有了活下去的理由，幾乎什麼都能夠忍受。」（書中引尼采）</td><td class="mono-wrap">16,783</td></tr>
+              <tr><td>後記 變成神的這種動物</td><td>「擁有神的能力，但是不負責任、貪得無厭，而且連想要什麼都不知道。」</td><td class="mono-wrap">21,131</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 節點與關係 ============ -->
+    <section class="section" id="graph">
+      <div class="section-head">
+        <span class="badge badge-emerald">節點與關係</span>
+        <h2>穩定 ID 讓圖、表、文字互相對照</h2>
+        <p class="text-sm">
+          <b class="lead-in">換標題不換 ID：</b>節點用語意明確的 ASCII ID；關係表記錄起點、關係、終點與依據。
+        </p>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:2.5rem;">
+        <div class="glass-card stripe-cyan node-card">
+          <span class="id-chip">ignoramus</span>
+          <h3>承認無知</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>認識論門檻，整套體系對最重要的問題無知。</p>
+        </div>
+        <div class="glass-card stripe-cyan node-card">
+          <span class="id-chip">mathobs</span>
+          <h3>觀察與數學</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>把經驗整理成可計算理論的方法。</p>
+        </div>
+        <div class="glass-card stripe-cyan node-card">
+          <span class="id-chip">newpower</span>
+          <h3>新能力</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>知識的考驗標準，能造出新東西才算數。</p>
+        </div>
+        <div class="glass-card stripe-violet node-card">
+          <span class="id-chip id-chip--violet">science</span>
+          <h3>科學</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>承認無知並前往尋找的知識體系。</p>
+        </div>
+        <div class="glass-card stripe-violet node-card">
+          <span class="id-chip id-chip--violet">empire</span>
+          <h3>帝國</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>填補地圖空白、取得資料與保護的遠征者。</p>
+        </div>
+        <div class="glass-card stripe-emerald node-card">
+          <span class="id-chip">capital</span>
+          <h3>資本</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>相信明天會更好、以信用與再投資增壓的經濟。</p>
+        </div>
+        <div class="glass-card stripe-emerald node-card">
+          <span class="id-chip">credit</span>
+          <h3>信用</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>把想象未來的資源拿到現在用的機制。</p>
+        </div>
+        <div class="glass-card stripe-emerald node-card">
+          <span class="id-chip">growth</span>
+          <h3>增長</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>現代經濟的主目標與資本主義教條核心。</p>
+        </div>
+        <div class="glass-card stripe-amber node-card">
+          <span class="id-chip id-chip--amber">energy</span>
+          <h3>能源轉換</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>工業革命的真正核心，把熱能變成動能。</p>
+        </div>
+        <div class="glass-card stripe-amber node-card">
+          <span class="id-chip id-chip--amber">agri</span>
+          <h3>農業工業化</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>第二次農業革命，釋放人力給工廠與辦公室。</p>
+        </div>
+        <div class="glass-card stripe-amber node-card">
+          <span class="id-chip id-chip--amber">consume</span>
+          <h3>消費主義</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>接手「生產超過需求」的新倫理。</p>
+        </div>
+        <div class="glass-card stripe-rose node-card">
+          <span class="id-chip id-chip--rose">happiness</span>
+          <h3>快樂</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>三種互不相容的解釋與未決前提。</p>
+        </div>
+        <div class="glass-card stripe-rose node-card">
+          <span class="id-chip id-chip--rose">sapiens</span>
+          <h3>智人</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>開始以智慧設計取代自然選擇的物種。</p>
+        </div>
+        <div class="glass-card stripe-rose node-card">
+          <span class="id-chip id-chip--rose">cost</span>
+          <h3>代價通道</h3>
+          <p class="text-sm"><b class="lead-in">角色：</b>迴圈的排氣口：奴隸貿易、饑荒、滅族、工業化畜牧。</p>
+        </div>
+      </div>
+
+      <div class="glass-card stripe-emerald">
+        <h3 style="margin-bottom:1rem;">關係（圖上放不下的條件都在這裡）</h3>
+        <div class="table-scroll">
+          <table class="data-matrix">
+            <caption>共 16 條；D2 只畫其中 3 條主幹，其餘由本表承載。</caption>
+            <thead>
+              <tr><th>起點</th><th>關係</th><th>終點</th><th>條件／依據</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="id-chip">ignoramus</span></td><td>推出</td><td><span class="id-chip">mathobs</span></td><td class="text-sm">只有承認不知道，才需要新的觀察（C1）</td></tr>
+              <tr><td><span class="id-chip">mathobs</span></td><td>產出</td><td><span class="id-chip">newpower</span></td><td class="text-sm">數學理論的用途是取得新能力（C1）</td></tr>
+              <tr><td><span class="id-chip">newpower</span></td><td>換取</td><td><span class="id-chip">science</span></td><td class="text-sm">新能力說服政府與企業出錢，形成回饋（I1）</td></tr>
+              <tr><td><span class="id-chip id-chip--violet">science</span></td><td>提供實用知識給</td><td><span class="id-chip id-chip--violet">empire</span></td><td class="text-sm">地圖、醫藥、語言學具政治軍事價值（C6）</td></tr>
+              <tr><td><span class="id-chip id-chip--violet">empire</span></td><td>回報資料與保護給</td><td><span class="id-chip id-chip--violet">science</span></td><td class="text-sm">遠征隊攜帶科學家，帝國資助研究（C6）</td></tr>
+              <tr><td><span class="id-chip id-chip--violet">empire</span></td><td>供給殖民地利潤給</td><td><span class="id-chip">capital</span></td><td class="text-sm">美洲金銀與種植園建立信任（C9）</td></tr>
+              <tr><td><span class="id-chip">capital</span></td><td>資助遠征與實驗室</td><td><span class="id-chip id-chip--violet">empire</span></td><td class="text-sm">信用讓征服不必靠加稅（C9）</td></tr>
+              <tr><td><span class="id-chip">capital</span></td><td>投資科學研究</td><td><span class="id-chip id-chip--violet">science</span></td><td class="text-sm">金主先問「會提高產量和利潤嗎」（C5）</td></tr>
+              <tr><td><span class="id-chip id-chip--violet">science</span></td><td>提供技術與新能源給</td><td><span class="id-chip">capital</span></td><td class="text-sm">印鈔票的是銀行，買單的是科學（C11）</td></tr>
+              <tr><td><span class="id-chip">growth</span></td><td>需要原材料與能源</td><td><span class="id-chip id-chip--amber">energy</span></td><td class="text-sm">若能源耗盡，系統就崩潰（C12）</td></tr>
+              <tr><td><span class="id-chip id-chip--amber">energy</span></td><td>解除原料限制</td><td><span class="id-chip id-chip--amber">agri</span></td><td class="text-sm">廉價能源讓遠距原料與新材料可行（C12）</td></tr>
+              <tr><td><span class="id-chip id-chip--amber">agri</span></td><td>釋放人力給</td><td><span class="id-chip id-chip--amber">consume</span></td><td class="text-sm">少數農民養活多數非農業人口（C11、C13）</td></tr>
+              <tr><td><span class="id-chip id-chip--amber">consume</span></td><td>產生更多利潤回流</td><td><span class="id-chip">growth</span></td><td class="text-sm">「購買！」與「投資！」互為條件（C11）</td></tr>
+              <tr><td><span class="id-chip">growth</span></td><td>排氣出</td><td><span class="id-chip id-chip--rose">cost</span></td><td class="text-sm">增長不受道德制衡時衍生成災難（C8）</td></tr>
+              <tr><td><span class="id-chip id-chip--rose">happiness</span></td><td>前提被質疑</td><td><span class="id-chip id-chip--rose">sapiens</span></td><td class="text-sm">若能改造慾望，人的定義同時被改寫（C14、C15）</td></tr>
+              <tr><td><span class="id-chip id-chip--rose">sapiens</span></td><td>三條路徑取代</td><td><span class="id-chip">newpower</span></td><td class="text-sm">自然選擇被智慧設計取代（C15）</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 來源與邊界 ============ -->
+    <section class="section" id="sources">
+      <div class="section-head">
+        <span class="badge badge-cyan">來源與邊界</span>
+        <h2>可定位、可重查、不越界</h2>
+        <p class="text-sm">
+          <b class="lead-in">一句話原則：</b>GitHub 只保存知識層；<code class="mono-wrap">01_</code>／<code class="mono-wrap">02_</code> 全文留在本機且維持 ignored。
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <div class="glass-card stripe-cyan node-card">
+          <span class="id-chip">S1</span>
+          <h3>本機全文（Git ignored）</h3>
+          <p class="text-sm mono-wrap">topics/大歷史/02_全書正文MD/人類簡史三部曲…/01_人類簡史：從動物到上帝（新版）.md</p>
+          <p class="text-sm"><b class="lead-in">範圍：</b>第 2245–3818 行（第四部分起點至後記結束）。</p>
+          <p class="text-sm"><b class="lead-in">邊界：</b>只帶回結論與單句短引用，不重建正文。</p>
+        </div>
+        <div class="glass-card stripe-violet node-card">
+          <span class="id-chip id-chip--violet">S2</span>
+          <h3>WeRead API 精華（Git tracked）</h3>
+          <p class="text-sm mono-wrap">topics/大歷史/03_精華劃線與書評摘要/人類簡史：從動物到上帝_精華與書評.md</p>
+          <p class="text-sm"><b class="lead-in">版本：</b>bookId 855812，exportedAt 2026-09-16 22:41:42。</p>
+          <p class="text-sm"><b class="lead-in">用途：</b>熱門劃線與深度書評。</p>
+        </div>
+        <div class="glass-card stripe-amber node-card">
+          <span class="id-chip id-chip--amber">S3</span>
+          <h3>工作流規則（非事實來源）</h3>
+          <p class="text-sm"><b class="lead-in">內容：</b>control plane <code class="mono-wrap">knowledge-publication</code> 模組。</p>
+          <p class="text-sm"><b class="lead-in">用途：</b>產出流程、驗證關卡與呈現規範。</p>
+        </div>
+        <div class="glass-card stripe-emerald node-card">
+          <span class="id-chip">S4</span>
+          <h3>Flash UI Craft 固定版本</h3>
+          <p class="text-sm mono-wrap">arislee1979-afk/0_YT_TEST @ 9ffd9f31c104fa09b44f9bd87c25cbf01313b432</p>
+          <p class="text-sm"><b class="lead-in">用途：</b><code class="mono-wrap">tokens.css</code>、<code class="mono-wrap">diagram-lightbox.js</code> 與檢查工具。</p>
+          <p class="text-sm"><b class="lead-in">核對：</b>本機 clone HEAD 即此 commit。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 雙源比對 ============ -->
+    <section class="section" id="crosscheck">
+      <div class="section-head">
+        <span class="badge badge-rose">雙源比對 · 新增</span>
+        <h2>書籍正文 × 影片解析筆記：哪裡一致、哪裡只有一邊</h2>
+        <p class="text-sm">
+          <b class="lead-in">怎麼來的：</b>把本專題的書籍正文來源（S1／S2）與
+          <code class="mono-wrap">LOCAL ONLY</code> 的 <code class="mono-wrap">0_YT_TEST/topics/02_human-history/</code> a00–a06 影片筆記（S5）逐条比對，
+          產出第二份 canonical <code class="mono-wrap">人類簡史第四部分_雙源比對與整合_知識來源.md</code>。
+          結果是**互補而非重複**：C1–C10 有雙源覆蓋，<b>C11–C15 只有書籍正文</b>。
+        </p>
+      </div>
+
+      <section class="glass-card diagram-card" data-diagram-card data-diagram-title="D6 雙源覆蓋圖">
+        <div class="diagram-card__header">
+          <div class="diagram-card__heading">
+            <span class="badge badge-rose">Mermaid ID：s1 / s5 / cmp / dual / s1only / s5only / conflict</span>
+            <h3 class="diagram-card__title">兩個來源餵進同一個比對節點</h3>
+            <p class="diagram-card__hint"><b class="lead-in">閱讀方式：</b>兩條來源粗細不同——S1 覆蓋整部第四部分，S5 只到第 16 章主題；比對後分出四個出口。</p>
+          </div>
+          <div class="diagram-card__actions">
+            <button class="btn btn-primary diagram-expand" type="button" data-diagram-open aria-label="全螢幕開啟 D6 雙源覆蓋圖">放大圖示</button>
+          </div>
+        </div>
+
+        <div class="svg-shell" tabindex="0" role="button" aria-label="點擊以全螢幕開啟 D6 雙源覆蓋圖">
+          <svg viewBox="0 0 1320 920" role="img" aria-label="D6：書籍正文與影片筆記兩個來源匯入比對節點，分出雙源一致、僅書籍正文、僅影片筆記、衝突與待驗證四個出口">
+            <defs>
+              <filter id="d6glow" x="-25%" y="-25%" width="150%" height="150%">
+                <feGaussianBlur stdDeviation="3.5" result="b"/>
+                <feComposite in="SourceGraphic" in2="b" operator="over"/>
+              </filter>
+              <marker id="d6arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 1.2 L9 5 L0 8.8 Z" fill="#fda4af"/>
+              </marker>
+            </defs>
+
+            <path d="M 250 130 V 210 H 590 V 290" stroke="#06b6d4" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d6arrow)" filter="url(#d6glow)"/>
+            <text x="420" y="200" class="svg-edge-label" text-anchor="middle">第14–20章與後記</text>
+            <path d="M 1030 130 V 210 H 690 V 290" stroke="#f59e0b" stroke-width="2.8" fill="none" class="beam-line" marker-end="url(#d6arrow)" filter="url(#d6glow)"/>
+            <text x="860" y="200" class="svg-edge-label" text-anchor="middle">第14–16章主題</text>
+
+            <path d="M 300 400 V 490 H 120 V 556" stroke="#10b981" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d6arrow)" filter="url(#d6glow)"/>
+            <path d="M 640 400 V 556" stroke="#06b6d4" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d6arrow)" filter="url(#d6glow)"/>
+            <path d="M 980 400 V 490 H 1085 V 556" stroke="#f59e0b" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d6arrow)" filter="url(#d6glow)"/>
+            <path d="M 790 345 H 1280 V 800 H 950" stroke="#f43f5e" stroke-width="3" fill="none" class="beam-line" marker-end="url(#d6arrow)" filter="url(#d6glow)"/>
+
+            <g class="svg-node">
+              <rect x="60" y="30" width="380" height="100" rx="20" fill="#0d2230" stroke="rgba(6,182,212,0.55)" stroke-width="2.2"/>
+              <text x="84" y="62" class="svg-kicker" fill="#67e8f9">S1 · 書籍正文</text>
+              <text x="84" y="96" class="svg-title">《人類簡史》第四部分全文</text>
+            </g>
+            <g class="svg-node">
+              <rect x="840" y="30" width="380" height="100" rx="20" fill="#2a1e0d" stroke="rgba(245,158,11,0.55)" stroke-width="2.2"/>
+              <text x="864" y="62" class="svg-kicker" fill="#fbbf24">S5 · 影片筆記 a00–a06</text>
+              <text x="864" y="96" class="svg-title">五支講述影片的解析</text>
+            </g>
+            <g class="svg-node">
+              <rect x="490" y="290" width="300" height="110" rx="20" fill="#211735" stroke="rgba(139,92,246,0.6)" stroke-width="2.2"/>
+              <text x="514" y="322" class="svg-kicker" fill="#c4b5fd">COMPARE</text>
+              <text x="514" y="356" class="svg-title">逐条比對</text>
+              <text x="514" y="382" class="svg-sub">數字、脈絡、因果一併核</text>
+            </g>
+            <g class="svg-node">
+              <rect x="30" y="560" width="330" height="120" rx="22" fill="#14291f" stroke="rgba(16,185,129,0.58)" stroke-width="2.2"/>
+              <text x="54" y="592" class="svg-kicker" fill="#6ee7b7">DUAL</text>
+              <text x="54" y="624" class="svg-title">雙源都有</text>
+              <text x="54" y="650" class="svg-sub">C1 C2 C3 C5</text>
+              <text x="54" y="670" class="svg-sub">C7 C9 C10</text>
+            </g>
+            <g class="svg-node">
+              <rect x="400" y="560" width="480" height="120" rx="22" fill="#0d2230" stroke="rgba(6,182,212,0.55)" stroke-width="2.2"/>
+              <text x="424" y="592" class="svg-kicker" fill="#67e8f9">S1 ONLY</text>
+              <text x="424" y="624" class="svg-title">僅書籍正文</text>
+              <text x="424" y="650" class="svg-sub">C4 不科學支柱、C11 消費主義</text>
+              <text x="424" y="670" class="svg-sub">C12 能源、C13 農業、C14 快樂、C15 智人</text>
+            </g>
+            <g class="svg-node">
+              <rect x="920" y="560" width="330" height="120" rx="22" fill="#2a1e0d" stroke="rgba(245,158,11,0.58)" stroke-width="2.2"/>
+              <text x="944" y="592" class="svg-kicker" fill="#fbbf24">S5 ONLY</text>
+              <text x="944" y="624" class="svg-title">僅影片筆記</text>
+              <text x="944" y="650" class="svg-sub">C17–C24 當代遺產</text>
+              <text x="944" y="670" class="svg-sub">全部標 INFERENCE</text>
+            </g>
+            <g class="svg-node">
+              <rect x="330" y="740" width="620" height="120" rx="22" fill="#2a111b" stroke="rgba(244,63,94,0.62)" stroke-width="2.4"/>
+              <text x="354" y="772" class="svg-kicker" fill="#fb7185">CONFLICT · X1–X8</text>
+              <text x="354" y="806" class="svg-title">衝突、錯置與待驗證</text>
+              <text x="354" y="834" class="svg-sub">X1 人口數字錯置為最重要的一項</text>
+            </g>
+          </svg>
+        </div>
+
+        <p class="svg-caption">
+          <b class="lead-in">不可壓掉的一格：</b>`conflict` 出口與 C11–C15 的「僅書籍正文」標示都必須保留。
+          把 S5 畫成涵蓋整部第四部分，就是重現它自己的覆蓋落差。
+        </p>
+      </section>
+
+      <div id="matrix" class="glass-card stripe-emerald" style="margin-bottom:2.5rem;">
+        <h3 style="margin-bottom:1rem;">覆蓋矩陣（C1–C16 × 影片筆記）</h3>
+        <div class="table-scroll">
+          <table class="data-matrix">
+            <caption>「判定」欄的雙源一致以書籍正文行號為準；影片筆記只提供補充，不升格 FACT。</caption>
+            <thead>
+              <tr><th>ID</th><th>主張（簡）</th><th>S1</th><th>S5</th><th>判定</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="id-chip">C1</span></td><td>現代科學三特徵</td><td><span class="status status--fact">有</span></td><td><span class="status status--fact">有</span></td><td class="text-sm">雙源一致</td></tr>
+              <tr><td><span class="id-chip">C2</span></td><td>前現代兩種無知</td><td><span class="status status--fact">有</span></td><td><span class="status status--fact">有</span></td><td class="text-sm">雙源一致</td></tr>
+              <tr><td><span class="id-chip">C3</span></td><td>無知的革命</td><td><span class="status status--fact">有</span></td><td><span class="status status--fact">有</span></td><td class="text-sm">雙源一致</td></tr>
+              <tr><td><span class="id-chip">C4</span></td><td>維繫穩定的兩種不科學方法</td><td><span class="status status--fact">有</span></td><td><span class="status status--unknown">缺</span></td><td class="text-sm">僅書籍正文</td></tr>
+              <tr><td><span class="id-chip">C5</span></td><td>經費由政治經濟宗教決定</td><td><span class="status status--fact">有</span></td><td><span class="status status--fact">有</span></td><td class="text-sm">雙源一致，S5 補強</td></tr>
+              <tr><td><span class="id-chip">C6</span></td><td>科學×帝國、庫克、塔斯馬尼亞</td><td><span class="status status--fact">有</span></td><td><span class="status status--fact">有</span></td><td class="text-sm">S5 補充年份細節</td></tr>
+              <tr><td><span class="id-chip">C7</span></td><td>現代早期累積的潛力</td><td><span class="status status--fact">有</span></td><td><span class="status status--fact">有</span></td><td class="text-sm">雙源一致，S5 補數字</td></tr>
+              <tr><td><span class="id-chip">C8</span></td><td>進步正當化、種族主義→文化主義</td><td><span class="status status--fact">有</span></td><td><span class="status status--inference">部分</span></td><td class="text-sm">缺「進步論證」與「文化主義取代」</td></tr>
+              <tr><td><span class="id-chip">C9</span></td><td>增長＋對未來的信任</td><td><span class="status status--fact">有</span></td><td><span class="status status--fact">有</span></td><td class="text-sm">雙源一致</td></tr>
+              <tr><td><span class="id-chip">C10</span></td><td>利潤再投資</td><td><span class="status status--fact">有</span></td><td><span class="status status--fact">有</span></td><td class="text-sm">雙源一致</td></tr>
+              <tr><td><span class="id-chip">C11</span></td><td>資本與消費主義一體兩面</td><td><span class="status status--fact">有</span></td><td><span class="status status--unknown">缺</span></td><td class="text-sm">僅書籍正文</td></tr>
+              <tr><td><span class="id-chip">C12</span></td><td>工業革命＝能源轉換</td><td><span class="status status--fact">有</span></td><td><span class="status status--unknown">缺</span></td><td class="text-sm">僅書籍正文</td></tr>
+              <tr><td><span class="id-chip">C13</span></td><td>第二次農業革命、人力釋放</td><td><span class="status status--fact">有</span></td><td><span class="status status--unknown">缺</span></td><td class="text-sm">僅書籍正文</td></tr>
+              <tr><td><span class="id-chip">C14</span></td><td>快樂三解釋＋佛教</td><td><span class="status status--fact">有</span></td><td><span class="status status--unknown">缺</span></td><td class="text-sm">僅書籍正文</td></tr>
+              <tr><td><span class="id-chip">C15</span></td><td>三條路徑、吉爾伽美什</td><td><span class="status status--fact">有</span></td><td><span class="status status--inference">不相當</span></td><td class="text-sm">僅書籍正文</td></tr>
+              <tr><td><span class="id-chip">C16</span></td><td>團體能力≠個體福祉</td><td><span class="status status--fact">有</span></td><td><span class="status status--inference">部分</span></td><td class="text-sm">S5 部分對應</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="s5only" class="glass-card stripe-amber" style="margin-bottom:2.5rem;">
+        <h3 style="margin-bottom:1rem;">影片筆記獨有主張（C17–C24，全部 INFERENCE）</h3>
+        <p class="text-sm" style="margin-bottom:1.25rem;">
+          <b class="lead-in">為什麼是 INFERENCE：</b>書籍正文未述這些內容，它們來自影片筆記引用的外部文獻（Brockway、Edney、Shiva、Wallerstein 等），且多數數字未標出處。
+        </p>
+        <div class="grid-2">
+          <div class="glass-card stripe-rose node-card">
+            <span class="id-chip id-chip--rose">C17</span>
+            <h3>塔斯馬尼亞的具體年代</h3>
+            <p class="text-sm"><b class="lead-in">內容：</b>1803 年英國人抵達時原住民約「數千名」、1820–30 Black War、Truganini 1876 年卒且遺體被掘出展出數十年。</p>
+          </div>
+          <div class="glass-card stripe-rose node-card">
+            <span class="id-chip id-chip--rose">C18</span>
+            <h3>澳洲失竊的一代</h3>
+            <p class="text-sm"><b class="lead-in">內容：</b>20 世紀初至 1970 年代約 10 萬名原住民兒童被強制遷離；預期壽命短 8–10 年、監禁率高 15 倍以上；2023 年「原住民之聲」公投否決。</p>
+          </div>
+          <div class="glass-card stripe-violet node-card">
+            <span class="id-chip id-chip--violet">C19</span>
+            <h3>直線劃界的當代後果</h3>
+            <p class="text-sm"><b class="lead-in">內容：</b>1884–85 柏林會議 14 國劃定數萬公里直線邊界；1916 賽克斯-皮科協定塑造敘利亞／伊拉克／黎巴嫩。</p>
+          </div>
+          <div class="glass-card stripe-violet node-card">
+            <span class="id-chip id-chip--violet">C20</span>
+            <h3>製圖與投影的認知效應</h3>
+            <p class="text-sm"><b class="lead-in">內容：</b>非洲面積約為格陵蘭 14 倍；第三世界逾 60% 國界由歐洲人劃下；麥卡托投影放大高緯度。</p>
+          </div>
+          <div class="glass-card stripe-cyan node-card">
+            <span class="id-chip">C21</span>
+            <h3>科學作為殖民行政工具</h3>
+            <p class="text-sm"><b class="lead-in">內容：</b>1802 年起大三角測量、1876 年 Wickham 從邱園走私 70,000 顆橡膠種子、1786 年瓊斯提印歐語系後被接上雅利安神話。</p>
+          </div>
+          <div class="glass-card stripe-cyan node-card">
+            <span class="id-chip">C22</span>
+            <h3>身份政治的制度化</h3>
+            <p class="text-sm"><b class="lead-in">內容：</b>1871 年起印度「科學人口普查」與分開選舉制被連結到 1947 年印巴分治；1930 年代比利時在盧安達以身份證量化族群，被連結到 1994 年約 80 萬人百日屠殺。</p>
+          </div>
+          <div class="glass-card stripe-emerald node-card">
+            <span class="id-chip">C23</span>
+            <h3>金融掠奪的具體數字</h3>
+            <p class="text-sm"><b class="lead-in">內容：</b>1621 班達約 15,000 人、1781 宗號船 130 餘名黑奴、1765 東印度公司取得 Diwani 且年分紅 10–12.5%、1769–70 孟加拉大饑荒約 1,000 萬人死。</p>
+          </div>
+          <div class="glass-card stripe-emerald node-card">
+            <span class="id-chip">C24</span>
+            <h3>當代遺產與去殖民化主張</h3>
+            <p class="text-sm"><b class="lead-in">內容：</b>專利與條約牆（TRIPS、ISDS、印楝專利、疫苗分配）、IMF／世銀結構調整、AI「演算法殖民」；以及去殖民化三段（認識論、技術公共財、歷史正義）。</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="conflicts" class="glass-card stripe-rose">
+        <h3 style="margin-bottom:1rem;">衝突、錯置與待驗證（X1–X8）</h3>
+        <div class="table-scroll">
+          <table class="data-matrix">
+            <caption>X1 是這輪比對最重要的產出：並列兩個來源時必須逐条對照脈絡，不能因為數字大就照抄。</caption>
+            <thead>
+              <tr><th>ID</th><th>項目</th><th>內容</th><th>判定</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="id-chip id-chip--rose">X1</span></td><td>人口數字錯置</td><td class="text-sm">a01 在澳洲脈絡寫「90% 以上人口滅絕」；該數字屬美洲（書籍正文與 a02／a06 均用於美洲）</td><td><span class="status status--unknown">不採用澳洲版本</span></td></tr>
+              <tr><td><span class="id-chip id-chip--rose">X2</span></td><td>覆蓋範圍落差</td><td class="text-sm">影片筆記無 C11–C15 對應內容，即第 17–20 章與後記沒有筆記</td><td><span class="status status--inference">覆蓋缺口</span></td></tr>
+              <tr><td><span class="id-chip id-chip--rose">X3</span></td><td>孟加拉內部張力</td><td class="text-sm">「約 1,000 萬人死＝人口三分之一」隱含約 3,000 萬人，與同檔「土地稅 50%」互為張力</td><td><span class="status status--unknown">UNKNOWN</span></td></tr>
+              <tr><td><span class="id-chip id-chip--rose">X4</span></td><td>譯名不符</td><td class="text-sm">影片筆記副標題《從野獸到扮演上帝》與 *Sapiens: A Brief History of Humankind* 不符</td><td><span class="status status--inference">來源表已標示</span></td></tr>
+              <tr><td><span class="id-chip id-chip--rose">X5</span></td><td>來源可驗證性</td><td class="text-sm">五支影片僅一支有可驗證 URL</td><td><span class="status status--unknown">限制已聲明</span></td></tr>
+              <tr><td><span class="id-chip id-chip--rose">X6</span></td><td>不可查證數字</td><td class="text-sm">a03「哥倫布資本回報率高達數萬倍」無可查證基礎</td><td><span class="status status--unknown">不進入主張</span></td></tr>
+              <tr><td><span class="id-chip id-chip--rose">X7</span></td><td>鄭和規模兩種表述</td><td class="text-sm">a02 給絕對量（100 餘米、28,000 人）、a01 給相對量（「遠超庫克數十倍」），不可相加</td><td><span class="status status--inference">兩種並列</span></td></tr>
+              <tr><td><span class="id-chip id-chip--rose">X8</span></td><td>剛果數字單邊</td><td class="text-sm">書籍正文載 1885–1908 年剛果約 600 萬人喪生；影片筆記全系列未提及剛果</td><td><span class="status status--inference">單邊來源</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="sidenumbers" class="glass-card stripe-amber">
+        <h3 style="margin-bottom:1rem;">單邊數字：不可當共識</h3>
+        <p class="text-sm" style="margin-bottom:1.25rem;">
+          <b class="lead-in">規則：</b>只有一邊提供的數字，呈現層一律不得寫成「史料公認」。
+        </p>
+        <div class="grid-2">
+          <div class="card-inset">
+            <h3 style="margin-bottom:0.75rem;">僅書籍正文</h3>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;" class="text-sm">
+              <li>孟加拉大饑荒 1,000 餘萬人</li>
+              <li>美洲原住民銳減九成</li>
+              <li>奴隸貿易約 1,000 萬人、七成在甘蔗園</li>
+              <li>剛果約 600 萬人</li>
+              <li>太陽 90 分鐘能量＝人類一年用量</li>
+            </ul>
+          </div>
+          <div class="card-inset">
+            <h3 style="margin-bottom:0.75rem;">僅影片筆記</h3>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;" class="text-sm">
+              <li>班達 15,000 人</li>
+              <li>失竊的一代 10 萬兒童</li>
+              <li>盧安達 80 萬人</li>
+              <li>70,000 顆橡膠種子</li>
+              <li>1900 年歐洲掌控近 85% 陸地</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 限制與下一步 ============ -->
+    <section class="section" id="limits">
+      <div class="section-head">
+        <span class="badge badge-rose">限制與下一步</span>
+        <h2>還沒解決的事，與不可越界的線</h2>
+      </div>
+      <div class="grid-2">
+        <div class="glass-card stripe-rose node-card">
+          <span class="id-chip id-chip--rose">BOUNDARY</span>
+          <h3>內容邊界</h3>
+          <p class="text-sm"><b class="lead-in">不是全文庫：</b>本檔不得變成第二份正文語料庫；S1 維持 Git ignored。</p>
+          <p class="text-sm"><b class="lead-in">專題範圍：</b>只做赫拉利三部曲；《人類簡史》目前只完成第四部分，不主動擴寫其他部分。</p>
+          <p class="text-sm"><b class="lead-in">其他歷史書不處理：</b>《美國的故事》《押沙龍講世界史》《文明的故事》保持 LOCAL ONLY，不寫入、不改其 README 條目。</p>
+        </div>
+        <div class="glass-card stripe-amber node-card">
+          <span class="id-chip id-chip--amber">NEXT</span>
+          <h3>待人工決策</h3>
+          <p class="text-sm"><b class="lead-in">未解矛盾：</b>U1、U2、U3 都沒有答案，呈現層不得畫成已解決。</p>
+          <p class="text-sm"><b class="lead-in">等 bookId：</b>《未來簡史》《今日簡史》停在 <code class="mono-wrap">02_</code>，不搜書城、不用書名猜 id；使用者提供可靠 bookId 後再各自建立獨立知識檔，不合成三部曲合集檔。</p>
+          <p class="text-sm"><b class="lead-in">待決定：</b>是否將呈現層納入 Git 追蹤；本倉庫活分支是 main，本次不提交、不推送、不開 PR。</p>
+        </div>
+      </div>
+    </section>
+
+    </div>
+    <footer class="page-footer">
+      <div>
+        <a class="link-strong" href="./人類簡史_第四部分科學革命_知識來源.md">開啟 canonical 來源檔（Markdown + Mermaid）</a>
+      </div>
+      <div>
+        <a class="link-strong" href="./人類簡史第四部分_雙源比對與整合_知識來源.md">開啟雙源比對與整合來源檔（書籍正文 × 影片筆記）</a>
+      </div>
+      <div class="footer-links">
+        <a class="link-quiet" href="#top">回到頂端</a>
+        <a class="link-quiet" href="#questions">問題</a>
+        <a class="link-quiet" href="#claims">主張</a>
+        <a class="link-quiet" href="#crosscheck">雙源比對</a>
+        <a class="link-quiet" href="#sources">來源</a>
+        <a class="link-quiet" href="#limits">限制</a>
+      </div>
+      <p class="text-meta">
+        <b class="lead-in">狀態：</b>READY_FOR_HUMAN_REVIEW — local-only 候選，未發布、未提交、未部署。
+        視覺層依 Flash UI Craft <code class="mono-wrap">9ffd9f31</code>。內容邊界：GitHub 知識層不含 `01_`／`02_` 全文。
+      </p>
+    </footer>
+
+    </main>
+  </div>
+  </div>
+
+  <script>
+    (function () {
+      var details = document.querySelector('.toc__details');
+      if (details && window.matchMedia('(max-width: 1080px)').matches) details.open = false;
+      var links = [].slice.call(document.querySelectorAll('.toc__link'));
+      var map = {};
+      links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+      var targets = Object.keys(map).map(function (id) { return document.getElementById(id); }).filter(Boolean);
+      function setActive(id) {
+        links.forEach(function (a) {
+          var on = a.getAttribute('href') === '#' + id;
+          a.classList.toggle('is-active', on);
+          if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+        });
+      }
+      if (!('IntersectionObserver' in window) || !targets.length) return;
+      var visible = {};
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+        var best = null, bestRatio = 0;
+        Object.keys(visible).forEach(function (id) { if (visible[id] > bestRatio) { bestRatio = visible[id]; best = id; } });
+        if (best) setActive(best);
+      }, { rootMargin: '-72px 0px -55% 0px', threshold: [0, 0.15, 0.5, 1] });
+      targets.forEach(function (t) { io.observe(t); });
+    })();
+  </script>
+</body>
+</html>
